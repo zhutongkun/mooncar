@@ -290,6 +290,7 @@ class OBCameraNode {
   std::map<stream_index_pair, int> default_exposure_;
   int default_white_balance_ = 0;
   std::string camera_link_frame_id_ = "camera_link";
+  std::string tf_prefix_;
   std::string camera_name_ = "camera";
   std::map<stream_index_pair, ros::ServiceServer> get_exposure_srv_;
   std::map<stream_index_pair, ros::ServiceServer> set_exposure_srv_;

@@ -81,11 +81,12 @@ OBCameraNode::~OBCameraNode() {
 
 void OBCameraNode::getParameters() {
   camera_name_ = nh_private_.param<std::string>("camera_name", "camera");
-  camera_link_frame_id_ = camera_name_ + "_link";
+  tf_prefix_ = nh_private_.param<std::string>("tf_prefix", "");
+  camera_link_frame_id_ = tf_prefix_ + camera_name_ + "_link";
   for (const auto& stream_index : IMAGE_STREAMS) {
-    frame_id_[stream_index] = camera_name_ + "_" + stream_name_[stream_index] + "_frame";
+    frame_id_[stream_index] = tf_prefix_ + camera_name_ + "_" + stream_name_[stream_index] + "_frame";
     optical_frame_id_[stream_index] =
-        camera_name_ + "_" + stream_name_[stream_index] + "_optical_frame";
+        tf_prefix_ + camera_name_ + "_" + stream_name_[stream_index] + "_optical_frame";
   }
   for (const auto& stream_index : IMAGE_STREAMS) {
     std::string param_name = stream_name_[stream_index] + "_width";

@@ -301,11 +301,11 @@ class HandTrajectoryNode:
                         print(e)
                 else:
                     rospy.sleep(0.01)
-                self.result_publisher.publish(cv2_image2ros(cv2.resize(bgr_image, (640, 480)), self.name))
-                #cv2.imshow(self.name, cv2.resize(bgr_image, (640, 480)))
-                #key = cv2.waitKey(1)
-                #if key != -1:
-                #    break
+                # self.result_publisher.publish(cv2_image2ros(cv2.resize(bgr_image, (640, 480)), self.name))
+                cv2.imshow(self.name, cv2.resize(bgr_image, (640, 480)))
+                key = cv2.waitKey(1)
+                if key != -1:
+                   break
 
     def image_callback(self, ros_image):
         self.image = np.ndarray(shape=(ros_image.height, ros_image.width, 3), dtype=np.uint8, buffer=ros_image.data) # 原始 RGB 画面

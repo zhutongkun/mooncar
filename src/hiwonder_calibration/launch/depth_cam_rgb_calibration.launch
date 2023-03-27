@@ -2,16 +2,14 @@
 <!--rgb摄像头标定(rgb camera calibration)-->
 <launch>
     <!--出厂已标定，非必要务标定(calibrated before delivery, so you don't need to calibrate by yourself unless necessary.)-->
-    <arg name="depth_camera_name" default="depth_cam" />
+    <arg name="camera_name" default="gemini_camera" />
 
     <!--棋盘格大小(size of the chessboard)-->
     <arg name="size"    default="9x6" />
     <arg name="square"  default="0.023" />
 
     <!--深度摄像头-->
-    <include file="$(find hiwonder_peripherals)/launch/depth_cam.launch">
-        <arg name="depth_camera_name" value="$(arg depth_camera_name)"/>
-    </include>
+    <include file="$(find hiwonder_peripherals)/launch/depth_cam.launch"/>
 
     <!--底盘驱动(chassis driver)-->
     <include file="$(find hiwonder_controller)/launch/hiwonder_controller.launch"/>
@@ -26,6 +24,6 @@
         --square $(arg square)
         --k-coefficients=3
         --no-service-check
-        image:=/$(arg depth_camera_name)/rgb/image_raw
-        camera:=$(arg depth_camera_name)/rgb"/>
+        image:=/$(arg camera_name)/color/image_raw
+        camera:=$(arg camera_name)/color"/>
 </launch>

@@ -74,7 +74,7 @@ class Controller:
         self.pub_odom_transform = rospy.get_param('~pub_odom_transform','true')
 
 
-        self.machine_type = rospy.get_param('~machine_type', 'JetRover_Mecanum')
+        self.machine_type = rospy.get_param('~machine_type', 'ROSLander_Mecanum')
         self.cmd_vel = rospy.get_param('~cmd_vel', '/hiwonder_controller/cmd_vel')
         
         self.lock = threading.RLock()
@@ -93,13 +93,13 @@ class Controller:
         self.mecanum = MecanumChassis(wheelbase=0.216, track_width=0.195, wheel_diameter=0.097)
         
         self.machine_type = os.environ.get('MACHINE_TYPE')
-        if self.machine_type == 'JetRover_Mecanum':
+        if self.machine_type == 'ROSLander_Mecanum':
             self.linear_factor = rospy.get_param('~mecanum/linear_correction_factor', 1.00)
             self.angular_factor = rospy.get_param('~mecanum/angular_correction_factor', 1.00)
-        elif self.machine_type == 'JetRover_Tank':
+        elif self.machine_type == 'ROSLander_Tank':
             self.linear_factor = rospy.get_param('~tank/linear_correction_factor', 1.00)
             self.angular_factor = rospy.get_param('~tank/angular_correction_factor', 1.00)
-        elif self.machine_type == 'JetRover_Acker':
+        elif self.machine_type == 'ROSLander_Acker':
             self.linear_factor = rospy.get_param('~acker/linear_correction_factor', 1.00)
             self.angular_factor = rospy.get_param('~acker/angular_correction_factor', 1.00)
 
@@ -128,13 +128,13 @@ class Controller:
         rospy.Service('hiwonder_controller/load_calibrate_param', Trigger, self.load_calibrate_param)
 
     def load_calibrate_param(self, msg):
-        if self.machine_type == 'JetRover_Mecanum':
+        if self.machine_type == 'ROSLander_Mecanum':
             self.linear_factor = rospy.get_param('~mecanum/linear_correction_factor', 1.00)
             self.angular_factor = rospy.get_param('~mecanum/angular_correction_factor', 1.00)
-        elif self.machine_type == 'JetRover_Tank':
+        elif self.machine_type == 'ROSLander_Tank':
             self.linear_factor = rospy.get_param('~tank/linear_correction_factor', 1.00)
             self.angular_factor = rospy.get_param('~tank/angular_correction_factor', 1.00)
-        elif self.machine_type == 'JetRover_Acker':
+        elif self.machine_type == 'ROSLander_Acker':
             self.linear_factor = rospy.get_param('~acker/linear_correction_factor', 1.00)
             self.angular_factor = rospy.get_param('~acker/angular_correction_factor', 1.00)
         
@@ -179,7 +179,7 @@ class Controller:
         self.cmd_vel_callback(msg)
 
     def cmd_vel_callback(self, msg):
-        if self.machine_type == 'JetRover_Mecanum':
+        if self.machine_type == 'ROSLander_Mecanum':
             self.linear_x = msg.linear.x
             self.linear_y = msg.linear.y
         else:
@@ -191,14 +191,14 @@ class Controller:
                 self.linear_x = msg.linear.x 
             self.linear_y = 0
 
-        if self.machine_type != 'JetRover_Acker':
+        if self.machine_type != 'ROSLander_Acker':
             self.angular_z = msg.angular.z
             speed = math.sqrt(self.linear_x ** 2 + self.linear_y ** 2)
             direction = math.atan2(self.linear_x, self.linear_y)
             direction = math.pi * 2 + direction if direction < 0 else direction
             speeds = self.mecanum.set_velocity(speed, direction, self.angular_z)
             self.motor_pub.publish(speeds)
-        elif self.machine_type == 'JetRover_Acker':
+        elif self.machine_type == 'ROSLander_Acker':
             if msg.angular.z != 0:
                 r = self.linear_x/msg.angular.z
                 if r == 0:

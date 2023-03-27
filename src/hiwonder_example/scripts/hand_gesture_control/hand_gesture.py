@@ -44,6 +44,8 @@ class HandGestureControlNode:
         self.joints_pub = rospy.Publisher('/servo_controllers/port_id_1/multi_id_pos_dur', MultiRawIdPosDur, queue_size=1)  # 舵机控制(servo control)
         rospy.sleep(0.2)
         self.mecanum_pub.publish(Twist())
+        self.enter_srv_callback(None)
+        self.set_running_srv_callback(SetBoolRequest(data=True))
 
     def enter_srv_callback(self, _):
         set_servos(self.joints_pub, 1.5, ((10, 300), (5, 500), (4, 600), (3, 0), (2, 750), (1, 500)))

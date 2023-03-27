@@ -17,4 +17,5 @@
     <xacro:SimpleTransmissionPosition joint="joint2" />
     <xacro:SimpleTransmissionPosition joint="joint3" />
     <xacro:SimpleTransmissionPosition joint="joint4" />
+    <xacro:SimpleTransmissionPosition joint="joint5" />
 </robot>

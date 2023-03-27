@@ -40,7 +40,7 @@ roslaunch hiwonder_calibration calibrate_imu.launch
 
 #hiwonder_example
 #深度摄像头红外可视化 
-roslaunch hiwonder_example depth_cam_ir_view.launc
+roslaunch hiwonder_example depth_cam_ir_view.launch
 
 #深度摄像头点云可视化 
 roslaunch hiwonder_example depth_cam_point_cloud_view.launch

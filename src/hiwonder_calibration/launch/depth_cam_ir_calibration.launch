@@ -4,16 +4,14 @@
     <!--出厂已标定，非必要务标定，标定需要自备红外补光源，然后遮住红外发射镜头即左边镜头(the camera has been calibrated before delivery,
     so you don't need to calibrate by yourself unless necessary. For calibration, you need to prepare your own infrared fill light,
     and then cover the infrared emitting lens, that is, the left lens.) -->
-    <arg name="depth_camera_name" default="depth_cam" />
+    <arg name="camera_name" default="gemini_camera" />
 
     <!--棋盘格大小(size of the chessboard)-->
     <arg name="size"    default="8x6" />
     <arg name="square"  default="0.0143" />
 
     <!--深度摄像头-->
-    <include file="$(find hiwonder_peripherals)/launch/depth_cam.launch">
-        <arg name="depth_camera_name" value="$(arg depth_camera_name)"/>
-    </include>
+    <include file="$(find hiwonder_peripherals)/launch/depth_cam.launch"/>
 
     <!--底盘驱动(chassis driver)-->
     <include file="$(find hiwonder_controller)/launch/hiwonder_controller.launch"/>
@@ -31,6 +29,6 @@
         --square $(arg square)
         --k-coefficients=3
         --no-service-check
-        image:=/$(arg depth_camera_name)/ir/image
-        camera:=$(arg depth_camera_name)/ir"/>
+        image:=/$(arg camera_name)/ir/image
+        camera:=$(arg camera_name)/ir"/>
 </launch>

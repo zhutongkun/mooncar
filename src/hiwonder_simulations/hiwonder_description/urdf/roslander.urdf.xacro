@@ -172,7 +172,7 @@
       xyz="0 0 0" />
   </joint>
   <link
-    name="depth_cam_link">
+    name="astra_camera_link">
     <visual>
       <origin
         xyz="0 0 0"
@@ -185,7 +185,7 @@
     </visual>
   </link>
   <joint
-    name="depth_cam_joint"
+    name="astra_camera_joint"
     type="fixed">
     <origin
       xyz="0.0255053534641942 0 0.151269407648836"
@@ -193,7 +193,7 @@
     <parent
       link="screen_link" />
     <child
-      link="depth_cam_link" />
+      link="astra_camera_link" />
     <axis
       xyz="0 0 0" />
   </joint>
@@ -360,16 +360,17 @@
     name="link4">
     <inertial>
       <origin
-        xyz="0.000117652200128613 0.00166481375778722 0.0168007196434552"
+        xyz="-0.000261855576526311 0.000239368359066633 0.0220971301535388"
         rpy="0 0 0" />
-      <mass value="0.00001" />
+      <mass
+        value="0.00959141779390409" />
       <inertia
-        ixx="10"
-        ixy="0"
-        ixz="0"
-        iyy="10"
-        iyz="0"
-        izz="10" />
+        ixx="7.94977139591732E-06"
+        ixy="-8.29446018776969E-10"
+        ixz="5.6880898756802E-08"
+        iyy="4.29063067361656E-06"
+        iyz="-1.84622131688891E-10"
+        izz="5.33833388813501E-06" />
     </inertial>
     <visual>
       <origin
@@ -395,7 +396,7 @@
     name="joint4"
     type="revolute">
     <origin
-      xyz="0 0 0.129360132190811"
+      xyz="0 0 0.129444631186569"
       rpy="0 0 0" />
     <parent
       link="link3" />
@@ -410,20 +411,20 @@
       velocity="10" />
   </joint>
   <link
-    name="gripper_base">
+    name="servo_link2">
     <inertial>
       <origin
-        xyz="0.0135164471754075 -0.00245409302071614 0.0255243476105937"
+        xyz="0.00829457691057159 0.000114732113040695 -0.0125525321145837"
         rpy="0 0 0" />
       <mass
-        value="0.0187986809487493" />
+        value="0.00701021225113507" />
       <inertia
-        ixx="4.18626999238256E-06"
-        ixy="-2.76258595538016E-08"
-        ixz="-7.69570071724482E-09"
-        iyy="1.60184662496099E-06"
-        iyz="2.25420771711905E-08"
-        izz="3.29280750879291E-06" />
+        ixx="6.10646998888003E-07"
+        ixy="1.66839713815154E-09"
+        ixz="-2.07626862362467E-08"
+        iyy="9.477990166652E-07"
+        iyz="5.12927100881908E-09"
+        izz="1.44691449724265E-06" />
     </inertial>
     <visual>
       <origin
@@ -431,7 +432,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://hiwonder_description/meshes/gripper_base.STL" />
+          filename="package://hiwonder_description/meshes/servo_link2.STL" />
       </geometry>
       <material name="black"/>
     </visual>
@@ -441,7 +442,110 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://hiwonder_description/meshes/gripper_base.STL" />
+          filename="package://hiwonder_description/meshes/servo_link2.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="servo_joint2"
+    type="fixed">
+    <origin
+      xyz="0 0 0.0544833339503674"
+      rpy="0 0 0" />
+    <parent
+      link="link4" />
+    <child
+      link="servo_link2" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <link
+    name="link5">
+    <inertial>
+      <origin
+        xyz="-5.40141895711381E-05 -8.30141354428709E-06 0.00351551092860852"
+        rpy="0 0 0" />
+      <mass
+        value="0.00101775298619909" />
+      <inertia
+        ixx="2.35834256739382E-08"
+        ixy="-1.92177809145012E-12"
+        ixz="-3.88572739181837E-12"
+        iyy="2.35740360938003E-08"
+        iyz="-1.1228386368903E-13"
+        izz="4.40224050991292E-08" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://hiwonder_description/meshes/link5.STL" />
+      </geometry>
+      <material name="black"/>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://hiwonder_description/meshes/link5.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="joint5"
+    type="revolute">
+    <origin
+      xyz="0 0 0"
+      rpy="0 0 0" />
+    <parent
+      link="servo_link2" />
+    <child
+      link="link5" />
+    <axis
+      xyz="0 0 -1" />
+    <limit
+      lower="-2.09"
+      upper="2.09"
+      effort="1000"
+      velocity="10" />
+  </joint>
+  <link
+    name="gripper_link">
+    <inertial>
+      <origin
+        xyz="0.0145481835889059 -0.00315257290321308 0.0253492053712461"
+        rpy="0 0 0" />
+      <mass
+        value="0.0174988490314194" />
+      <inertia
+        ixx="4.12615692688456E-06"
+        ixy="-2.75102939068049E-08"
+        ixz="-7.61180742281118E-09"
+        iyy="1.57023365316943E-06"
+        iyz="2.2563082379695E-08"
+        izz="3.2612101868791E-06" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://hiwonder_description/meshes/gripper_link.STL" />
+      </geometry>
+      <material name="black"/>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://hiwonder_description/meshes/gripper_link.STL" />
       </geometry>
     </collision>
   </link>
@@ -449,30 +553,39 @@
     name="gripper_joint"
     type="fixed">
     <origin
-      xyz="0 0 0.0415523547092036"
+      xyz="0 0 0.0054388"
       rpy="0 0 0" />
     <parent
-      link="link4" />
+      link="link5" />
     <child
-      link="gripper_base" />
+      link="gripper_link" />
     <axis
       xyz="0 0 0" />
+  </joint>
+
+  <!-- end effector link -->
+  <link name="end_effector_link" />
+
+  <joint name="end_effector_joint" type="fixed">
+    <origin xyz="0 0 0.08" rpy="0 0 0"/>
+    <parent link="link5"/>
+    <child link="end_effector_link"/>
   </joint>
   <link
     name="r_link">
     <inertial>
       <origin
-        xyz="4.5917753844606E-05 0.000541568299117931 0.00625139747060544"
+        xyz="0.00154652142582958 0.000534112070478834 0.00624030428121536"
         rpy="0 0 0" />
       <mass
-        value="0.00206273118071422" />
+        value="0.00206265647704866" />
       <inertia
-        ixx="3.97236083071195E-07"
-        ixy="-2.70823664638678E-10"
-        ixz="-2.16820413734473E-09"
-        iyy="3.22499205032185E-07"
-        iyz="1.07452392164753E-08"
-        izz="7.78636035301087E-08" />
+        ixx="3.97215843669342E-07"
+        ixy="-2.75699120579387E-10"
+        ixz="-2.19901048536124E-09"
+        iyy="3.22472627342115E-07"
+        iyz="1.07303783544668E-08"
+        izz="7.78708186672131E-08" />
     </inertial>
     <visual>
       <origin
@@ -498,35 +611,35 @@
     name="r_joint"
     type="revolute">
     <origin
-      xyz="-0.0056586 -0.012538 0.027102"
+      xyz="-0.0073166 -0.013992 0.027059"
       rpy="0 0 0" />
     <parent
-      link="gripper_base" />
+      link="gripper_link" />
     <child
       link="r_link" />
     <axis
-      xyz="-1 0 0" />
+      xyz="0.99996 -0.004699 -0.0070434" />
     <limit
       lower="-1.57"
       upper="1.57"
       effort="1000"
-      velocity="2" />
+      velocity="10" />
   </joint>
   <link
     name="l_link">
     <inertial>
       <origin
-        xyz="3.79169240065586E-05 -0.000411330229694192 0.00580564378864612"
+        xyz="0.0015384031888858 -0.000403232726847674 0.00579759783012201"
         rpy="0 0 0" />
       <mass
-        value="0.00218935442813927" />
+        value="0.00218924933187322" />
       <inertia
-        ixx="4.05423576726065E-07"
-        ixy="3.5639084027101E-10"
-        ixz="-1.96705902005403E-09"
-        iyy="3.31275196418489E-07"
-        iyz="-8.75686731441383E-09"
-        izz="7.74603139284005E-08" />
+        ixx="4.0534152698165E-07"
+        ixy="3.60077827494503E-10"
+        ixz="-1.99675888093364E-09"
+        iyy="3.31222174181852E-07"
+        iyz="-8.79337758250917E-09"
+        izz="7.74319582642917E-08" />
     </inertial>
     <visual>
       <origin
@@ -552,135 +665,19 @@
     name="l_joint"
     type="revolute">
     <origin
-      xyz="-0.0056772 0.015434 0.027105"
+      xyz="-0.0073352 0.013977 0.027057"
       rpy="0 0 0" />
     <parent
-      link="gripper_base" />
+      link="gripper_link" />
     <child
       link="l_link" />
     <axis
-      xyz="-1 0 0" />
+      xyz="0.99997 0.0055811 -0.0058397" />
     <limit
       lower="-1.57"
       upper="1.57"
       effort="1000"
-      velocity="2" />
-    <mimic
-      joint="r_joint"
-      multiplier="-1"
-      offset="0" />
-  </joint>
-  <link
-    name="r_in_link">
-    <inertial>
-      <origin
-        xyz="0.00460054659575418 -2.07965839691421E-05 0.0144687504641022"
-        rpy="0 0 0" />
-      <mass
-        value="0.000776937620409709" />
-      <inertia
-        ixx="9.8752111566072E-08"
-        ixy="-5.02144302953861E-12"
-        ixz="-6.7016858192728E-10"
-        iyy="9.76692470887995E-08"
-        iyz="-2.41388732380185E-13"
-        izz="2.25760020432699E-09" />
-    </inertial>
-    <visual>
-      <origin
-        xyz="0 0 0"
-        rpy="0 0 0" />
-      <geometry>
-        <mesh
-          filename="package://hiwonder_description/meshes/r_in_link.STL" />
-      </geometry>
-      <material name="black"/>
-    </visual>
-    <collision>
-      <origin
-        xyz="0 0 0"
-        rpy="0 0 0" />
-      <geometry>
-        <mesh
-          filename="package://hiwonder_description/meshes/r_in_link.STL" />
-      </geometry>
-    </collision>
-  </link>
-  <joint
-    name="r_in_joint"
-    type="revolute">
-    <origin
-      xyz="-0.0055067 -0.0035022 0.046066"
-      rpy="0 0 0" />
-    <parent
-      link="gripper_base" />
-    <child
-      link="r_in_link" />
-    <axis
-      xyz="-1 0 0" />
-    <limit
-      lower="-1.57"
-      upper="1.57"
-      effort="1000"
-      velocity="2" />
-    <mimic
-      joint="r_joint"
-      multiplier="1"
-      offset="0" />
-  </joint>
-  <link
-    name="r_out_link">
-    <inertial>
-      <origin
-        xyz="0.0045243213641785 -0.00255629096967728 0.0027220124845041"
-        rpy="0 0 0" />
-      <mass
-        value="0.0027655444006415" />
-      <inertia
-        ixx="8.44587044099157E-07"
-        ixy="-1.20731268872571E-09"
-        ixz="-6.4565040218981E-09"
-        iyy="7.92218847050392E-07"
-        iyz="-1.49261377126586E-07"
-        izz="5.66223350109746E-08" />
-    </inertial>
-    <visual>
-      <origin
-        xyz="0 0 0"
-        rpy="0 0 0" />
-      <geometry>
-        <mesh
-          filename="package://hiwonder_description/meshes/r_out_link.STL" />
-      </geometry>
-      <material name="black"/>
-    </visual>
-    <collision>
-      <origin
-        xyz="0 0 0"
-        rpy="0 0 0" />
-      <geometry>
-        <mesh
-          filename="package://hiwonder_description/meshes/r_out_link.STL" />
-      </geometry>
-    </collision>
-  </link>
-  <joint
-    name="r_out_joint"
-    type="revolute">
-    <origin
-      xyz="0.0002014 0 0.028999"
-      rpy="0 0 0" />
-    <parent
-      link="r_in_link" />
-    <child
-      link="r_out_link" />
-    <axis
-      xyz="-1 0 0" />
-    <limit
-      lower="-1.57"
-      upper="1.57"
-      effort="1000"
-      velocity="2" />
+      velocity="10" />
     <mimic
       joint="r_joint"
       multiplier="-1"
@@ -690,17 +687,17 @@
     name="l_in_link">
     <inertial>
       <origin
-        xyz="0.00460054381858996 2.08069632397171E-05 0.0144683574936163"
+        xyz="0.00610191812065245 2.91459132896708E-05 0.0144573768632076"
         rpy="0 0 0" />
       <mass
-        value="0.00077693762040967" />
+        value="0.000776872870694597" />
       <inertia
-        ixx="9.8751540663328E-08"
-        ixy="5.04379851632071E-12"
-        ixz="-6.70531143176801E-10"
-        iyy="9.76688157852237E-08"
-        iyz="6.9313275984558E-14"
-        izz="2.25747116037205E-09" />
+        ixx="9.87455572181138E-08"
+        ixy="5.06340928475727E-12"
+        ixz="-6.79685646256186E-10"
+        iyy="9.76635148452203E-08"
+        iyz="-6.12115908323794E-12"
+        izz="2.25695364751658E-09" />
     </inertial>
     <visual>
       <origin
@@ -726,19 +723,19 @@
     name="l_in_joint"
     type="revolute">
     <origin
-      xyz="-0.0055067 0.0063964 0.046066"
+      xyz="-0.0071623 0.0049403 0.046019"
       rpy="0 0 0" />
     <parent
-      link="gripper_base" />
+      link="gripper_link" />
     <child
       link="l_in_link" />
     <axis
-      xyz="-1 0 0" />
+      xyz="0.99996 0.0046983 -0.0070439" />
     <limit
       lower="-1.57"
       upper="1.57"
       effort="1000"
-      velocity="2" />
+      velocity="10" />
     <mimic
       joint="r_joint"
       multiplier="-1"
@@ -748,17 +745,17 @@
     name="l_out_link">
     <inertial>
       <origin
-        xyz="0.00452432641365978 0.00255625771382197 0.002722083089996"
+        xyz="0.00602407836518577 0.0014461936314294 0.00961214041434189"
         rpy="0 0 0" />
       <mass
-        value="0.00276553337862614" />
+        value="0.00384735908281124" />
       <inertia
-        ixx="8.44578540713377E-07"
-        ixy="1.2072399327257E-09"
-        ixz="-6.45614065086473E-09"
-        iyy="7.92214274718294E-07"
-        iyz="1.49259239755556E-07"
-        izz="5.66183628827531E-08" />
+        ixx="8.77337978935691E-07"
+        ixy="1.36760329013846E-09"
+        ixz="-6.9462127438421E-09"
+        iyy="8.19648792008027E-07"
+        iyz="1.56177294727923E-07"
+        izz="7.0687486597803E-08" />
     </inertial>
     <visual>
       <origin
@@ -784,39 +781,39 @@
     name="l_out_joint"
     type="revolute">
     <origin
-      xyz="0.0002014 0 0.028999"
+      xyz="0.00020427 0 0.028999"
       rpy="0 0 0" />
     <parent
       link="l_in_link" />
     <child
       link="l_out_link" />
     <axis
-      xyz="-1 0 0" />
+      xyz="0.99996 0.0046983 -0.0070439" />
     <limit
       lower="-1.57"
       upper="1.57"
       effort="1000"
-      velocity="2" />
+      velocity="10" />
     <mimic
       joint="r_joint"
       multiplier="1"
       offset="0" />
   </joint>
   <link
-    name="usb_cam_link">
+    name="r_in_link">
     <inertial>
       <origin
-        xyz="0.0032878 0.0014572 -0.014183"
+        xyz="0.00610191812065006 -2.81924690068705E-05 0.0144573787538957"
         rpy="0 0 0" />
       <mass
-        value="0.0076756" />
+        value="0.000776872870694522" />
       <inertia
-        ixx="1.2365E-06"
-        ixy="-1.2499E-13"
-        ixz="9.8257E-08"
-        iyy="1.2963E-06"
-        iyz="9.8943E-13"
-        izz="2.2868E-06" />
+        ixx="9.87465668171204E-08"
+        ixy="-5.11173808106636E-12"
+        ixz="-6.79692406191707E-10"
+        iyy="9.7664293636849E-08"
+        iyz="-5.14018800149497E-13"
+        izz="2.25718458778487E-09" />
     </inertial>
     <visual>
       <origin
@@ -824,7 +821,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://hiwonder_description/meshes/usb_cam_link.STL" />
+          filename="package://hiwonder_description/meshes/r_in_link.STL" />
       </geometry>
       <material name="black"/>
     </visual>
@@ -834,22 +831,89 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://hiwonder_description/meshes/usb_cam_link.STL" />
+          filename="package://hiwonder_description/meshes/r_in_link.STL" />
       </geometry>
     </collision>
   </link>
   <joint
-    name="usb_cam_joint"
-    type="fixed">
+    name="r_in_joint"
+    type="revolute">
     <origin
-      xyz="-0.036206 0 0.05478"
+      xyz="-0.0071623 -0.004943 0.046019"
       rpy="0 0 0" />
     <parent
-      link="link4" />
+      link="gripper_link" />
     <child
-      link="usb_cam_link" />
+      link="r_in_link" />
     <axis
-      xyz="0 0 0" />
+      xyz="-0.99996 0.0046987 0.0070436" />
+    <limit
+      lower="-1.57"
+      upper="1.57"
+      effort="1000"
+      velocity="10" />
+    <mimic
+      joint="r_joint"
+      multiplier="-1"
+      offset="0" />
+  </joint>
+  <link
+    name="r_out_link">
+    <inertial>
+      <origin
+        xyz="0.0060622 -0.0014474 0.0096107"
+        rpy="0 0 0" />
+      <mass
+        value="0.0038474" />
+      <inertia
+        ixx="8.7734E-07"
+        ixy="-1.2815E-09"
+        ixz="-6.7006E-09"
+        iyy="8.1957E-07"
+        iyz="-1.5635E-07"
+        izz="7.0761E-08" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://hiwonder_description/meshes/r_out_link.STL" />
+      </geometry>
+      <material name="black"/>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://hiwonder_description/meshes/r_out_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="r_out_joint"
+    type="revolute">
+    <origin
+      xyz="0.00020427 0 0.028999"
+      rpy="0 0 0" />
+    <parent
+      link="r_in_link" />
+    <child
+      link="r_out_link" />
+    <axis
+      xyz="-0.99996 0.0046987 0.0070436" />
+    <limit
+      lower="-1.57"
+      upper="1.57"
+      effort="1000"
+      velocity="10" />
+    <mimic
+      joint="r_joint"
+      multiplier="1"
+      offset="0" />
   </joint>
   <link
     name="wheel_front_right_link">
@@ -991,27 +1055,125 @@
     <axis
       xyz="0 0 0" />
   </joint>
-
-  <!-- end effector link -->
-  <link name="end_effector_link" />
-
-  <joint name="end_effector_joint" type="fixed">
-    <origin xyz="0 0 0.14" rpy="0 0 0"/>
-    <parent link="link4"/>
-    <child link="end_effector_link"/>
+  <link
+    name="camera_connect_link">
+    <inertial>
+      <origin
+        xyz="-0.00050566 0.010186 0.0012735"
+        rpy="0 0 0" />
+      <mass
+        value="0.0029007" />
+      <inertia
+        ixx="4.5276E-07"
+        ixy="-3.2151E-10"
+        ixz="-8.627E-12"
+        iyy="5.4068E-07"
+        iyz="-1.2081E-08"
+        izz="9.9085E-07" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://hiwonder_description/meshes/camera_connect_link.STL" />
+      </geometry>
+      <material name="black"/>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://hiwonder_description/meshes/camera_connect_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="camera_connect_joint"
+    type="fixed">
+    <origin
+      xyz="-0.0507060266977644 0 0.0505384841187764"
+      rpy="0 0 -1.57079632679489" />
+    <parent
+      link="link4" />
+    <child
+      link="camera_connect_link" />
+    <axis
+      xyz="0 0 0" />
   </joint>
-
+  <link
+    name="gemini_camera_link">
+    <inertial>
+      <origin
+        xyz="0.00232981322860787 0.000387137406184821 -2.84059740606052E-05"
+        rpy="0 0 0" />
+      <mass
+        value="0.015428" />
+      <inertia
+        ixx="1.3945E-06"
+        ixy="-1.5684E-08"
+        ixz="-2.3104E-07"
+        iyy="1.2848E-05"
+        iyz="1.3156E-09"
+        izz="1.361E-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://hiwonder_description/meshes/depth_cam_link_arm.STL" />
+      </geometry>
+      <material name="black"/>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://hiwonder_description/meshes/depth_cam_link_arm.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="gemini_camera_joint"
+    type="fixed">
+    <origin
+      xyz="0 0.0 0.014475"
+      rpy="${M_PI} -${M_PI/2} -${M_PI/2}"/>
+    <parent
+      link="camera_connect_link" />
+    <child
+      link="gemini_camera_link" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <link name="depth_cam_frame" />
+  <joint
+    name="depth_cam_joint_sim"
+    type="fixed">
+    <origin xyz="0 0 0" rpy="${-M_PI/2} 0 ${-M_PI/2}" />
+    <parent link="gemini_camera_link" />
+    <child link="depth_cam_frame" />
+  </joint>
   <link name="imu_link"/>
   <joint
     name="imu_joint"
     type="fixed">
     <origin
-      xyz="-${0.297 - 0.1481 -0.064} 0 ${0.125963557909225 - 0.045}"
-      rpy="0 0 ${M_PI}"/>
+      xyz="0.0048416 0.011168 0.07"
+      rpy="${M_PI} 0 -${M_PI/2}" />
     <parent
-      link="base_link"/>
+      link="base_link" />
     <child
-      link="imu_link"/>
+      link="imu_link" />
+    <axis
+      xyz="0 0 0" />
   </joint>
   <xacro:if value="${lidar in ['A1', 'A2', 'S2L']}">
     <xacro:include filename="$(find hiwonder_description)/urdf/lidar_a1.urdf.xacro"/>

@@ -1,5 +1,6 @@
 <launch>
     <!-- unique camera name-->
+    <arg name="tf_prefix" default=""/>
     <arg name="camera_name" default="camera"/>
     <arg name="output" default="screen"/>
     <!-- Hardware depth registration -->
@@ -14,20 +15,20 @@
     <arg name="connection_delay" default="100"/>
     <arg name="color_width" default="640"/>
     <arg name="color_height" default="480"/>
-    <arg name="color_fps" default="10"/>
+    <arg name="color_fps" default="30"/>
     <arg name="enable_color" default="true"/>
     <arg name="flip_color" default="false"/>
     <arg name="color_format" default="RGB"/>
     <arg name="enable_color_auto_exposure" default="true"/>
     <arg name="depth_width" default="640"/>
     <arg name="depth_height" default="480"/>
-    <arg name="depth_fps" default="10"/>
+    <arg name="depth_fps" default="30"/>
     <arg name="enable_depth" default="true"/>
     <arg name="flip_depth" default="false"/>
     <arg name="depth_format" default="Y11"/>
     <arg name="ir_width" default="640"/>
     <arg name="ir_height" default="480"/>
-    <arg name="ir_fps" default="10"/>
+    <arg name="ir_fps" default="30"/>
     <arg name="enable_ir" default="true"/>
     <arg name="ir_format" default="Y10"/>
     <arg name="flip_ir" default="false"/>
@@ -41,7 +42,8 @@
     <arg name="enable_pipeline" default="true"/>
     <arg name="enable_soft_filter" default="true"/>
     <group ns="$(arg camera_name)">
-        <node name="camera" pkg="orbbec_camera" type="orbbec_camera_node" output="$(arg output)">
+        <node name="$(arg camera_name)" pkg="orbbec_camera" type="orbbec_camera_node" output="$(arg output)">
+            <param name="tf_prefix" value="$(arg tf_prefix)"/>
             <param name="camera_name" value="$(arg camera_name)"/>
             <param name="depth_registration" value="$(arg depth_registration)"/>
             <param name="serial_number" type="string" value="$(arg serial_number)"/>

@@ -20,10 +20,10 @@
     <include file="$(find hiwonder_controller)/launch/hiwonder_controller.launch"/>
 
     <!--深度摄像头(depth camera)-->
-    <include file="$(find hiwonder_peripherals)/launch/depth_cam.launch">
-        <arg name="depth_camera_name" value="$(arg depth_camera_name)"/>
-        <arg name="image_topic" value="$(arg image_topic)"/>
-    </include>
+    <!--<include file="$(find hiwonder_peripherals)/launch/depth_cam.launch">-->
+        <!--<arg name="depth_camera_name" value="$(arg depth_camera_name)"/>-->
+        <!--<arg name="image_topic" value="$(arg image_topic)"/>-->
+    <!--</include>-->
 
     <!--app画面传输(app image transimission)-->
     <node if="$(eval depth_camera_type != '')" name="web_video_server" pkg="web_video_server" respawn="true" respawn_delay="2"  type="web_video_server" output="screen"/>

@@ -4,14 +4,12 @@
         <plugin name="mimic_plugin_r_out_link" filename="libroboticsgroup_upatras_gazebo_mimic_joint_plugin.so">
             <joint>r_joint</joint>
             <mimicJoint>r_out_joint</mimicJoint>
-            <multiplier>-1</multiplier>
-            <offset>0.0</offset>
         </plugin>
 
         <plugin name="mimic_plugin_r_in_link" filename="libroboticsgroup_upatras_gazebo_mimic_joint_plugin.so">
             <joint>r_joint</joint>
             <mimicJoint>r_in_joint</mimicJoint>
-            <multiplier>1</multiplier>
+            <multiplier>-1</multiplier>
             <offset>0.0</offset>
         </plugin>
 
