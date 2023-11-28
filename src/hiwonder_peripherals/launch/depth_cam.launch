@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<launch>
+    <arg name="depth_camera_type"   value="$(env DEPTH_CAMERA_TYPE)" doc="depth_camera_type [Dabai]"/>
+    <arg name="depth_camera_name"   default="depth_cam" />
+    <arg name="image_topic"         default="image_raw" />
+    <arg name="tf_prefix"           default=""/>
+    <arg name="frame_prefix"        default=""/>
+    <arg name="app"                 default="false"/>
+
+    <param name="depth_camera/camera_name"  value="$(arg depth_camera_name)"/>
+    <param name="depth_camera/image_topic"  value="$(arg image_topic)"/>
+
+    <include if="$(eval depth_camera_type == 'Dabai')" file="$(find astra_camera)/launch/Halley.launch">
+        <arg name="app"             value="$(arg app)"/>
+        <arg name="camera"          value="$(arg depth_camera_name)" />
+        <arg name="tf_prefix"       value="$(arg tf_prefix)" />
+        <arg name="frame_prefix"    value="$(arg frame_prefix)" />
+    </include>
+</launch>
