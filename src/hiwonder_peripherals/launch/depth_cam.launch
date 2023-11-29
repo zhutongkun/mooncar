@@ -16,4 +16,11 @@
         <arg name="tf_prefix"       value="$(arg tf_prefix)" />
         <arg name="frame_prefix"    value="$(arg frame_prefix)" />
     </include>
+
+    <include if="$(eval depth_camera_type == 'Dabai')" file="$(find astra_camera)/launch/Halley.launch">
+        <arg name="app"             value="$(arg app)"/>
+        <arg name="camera"          value="$(arg depth_camera_name)" />
+        <arg name="tf_prefix"       value="$(arg tf_prefix)" />
+        <arg name="frame_prefix"    value="$(arg frame_prefix)" />
+    </include>
 </launch>

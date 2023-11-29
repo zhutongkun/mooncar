@@ -2,13 +2,10 @@
 
 source $HOME/ros_ws/.typerc
 
-export AUDIODRIVER=alsa
-export OPENBLAS_CORETYPE=ARMV8
-export WORKON_HOME=$HOME/.virtualenvs
-export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python3
-source /usr/local/bin/virtualenvwrapper.sh
+#export AUDIODRIVER=alsa
+#export OPENBLAS_CORETYPE=ARMV8
 
-export CUDA_HOME=/usr/local/cuda
+export CUDA_HOME=/usr/local/cuda11.4
 export PATH=$CUDA_HOME/bin:$PATH
 export LD_LIBRARY_PATH=$CUDA_HOME/lib64:$LD_LIBRARY_PATH
 export LD_PRELOAD=/usr/lib/aarch64-linux-gnu/libgomp.so.1:$LD_PRELOAD
@@ -27,13 +24,13 @@ echo -e "ROS_HOSTNAME: \033[32m$ROS_HOSTNAME\033[0m"
 echo -e "ROS_MASTER_URI: \033[32m$ROS_MASTER_URI\033[0m"
 
 if [ $ZSH_VERSION ]; then
-  . /opt/ros/melodic/setup.zsh
+  . /opt/ros/noetic/setup.zsh
   . $HOME/ros_ws/devel/setup.zsh
 elif [ $BASH_VERSION ]; then
-  . /opt/ros_ws/melodic/setup.bash
+  . /opt/ros_ws/noetic/setup.bash
   . $HOME/ros_ws/devel/setup.bash
 else
-  . /opt/ros/melodic/setup.sh
+  . /opt/ros/noetic/setup.sh
   . $HOME/ros_ws/devel/setup.sh
 fi
 

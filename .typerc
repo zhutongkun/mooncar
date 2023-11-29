@@ -1,16 +1,16 @@
 #!/bin/bash
 
 # 当期版本
-export VERSION="V1.0.06 2023-10-27"
+export VERSION="V1.0.0 2023-11-29"
 
-# 雷达类型：A1/A2/C1/G4/S2L/LD14P
-export LIDAR_TYPE=A1
+# 雷达类型：S2L
+export LIDAR_TYPE=S2L
 
-# 深度摄像头类型：Dabai
-export DEPTH_CAMERA_TYPE=Dabai
+# 深度摄像头类型：Gemini&AstraProPlus
+export DEPTH_CAMERA_TYPE="Gemini&AstraProPlus"
 
-# 机器类型：JetRover_Mecanum/JetRover_Tank/JetRover_Acker
-export MACHINE_TYPE=JetRover_Mecanum
+# 机器类型：ROSLander_Mecanum/ROSLander_Tank/ROSLander_Acker
+export MACHINE_TYPE=ROSLander_Mecanum
 
 # 主从机设置：robot_xxx
 export HOST=robot_1
