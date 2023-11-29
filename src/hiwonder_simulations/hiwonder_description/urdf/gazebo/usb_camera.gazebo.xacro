@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<robot name="usb_cam" xmlns:xacro="http://ros.org/wiki/xacro">
+    <xacro:property name="M_PI"             value="3.1415926535897931"/>
+    <xacro:property name="usb_camera_name"  value="usb_cam" />
+    
+    <xacro:macro name="model_color" params="link_name color_name">
+        <gazebo reference="${link_name}">
+            <material>Gazebo/${color_name}</material>
+            <turnGravityOff>false</turnGravityOff>
+        </gazebo>
+    </xacro:macro>
+
+    <xacro:model_color link_name="${usb_camera_name}_link"    color_name="black"/>
+</robot>

@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <launch>
-    <param name="robot_description" command="$(find xacro)/xacro '$(find hiwonder_description)/urdf/jetrover.xacro'" />
+    <param name="robot_description" command="$(find xacro)/xacro '$(find hiwonder_description)/urdf/roslander.xacro'" />
     <node
       name="joint_state_publisher_gui"
       pkg="joint_state_publisher_gui"

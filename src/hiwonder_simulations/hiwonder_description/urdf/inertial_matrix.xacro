@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<robot name="inertial_matrix" xmlns:xacro="http://ros.org/wiki/xacro">
+<robot name="hiwonder" xmlns:xacro="http://ros.org/wiki/xacro">
   <xacro:property name="M_PI" value="3.1415926535897931" />
 
   <!-- Macro for inertia matrix -->
@@ -29,11 +29,8 @@
     </inertial>
   </xacro:macro>
 
-  <xacro:macro name="box_inertial" params="m w h d x y z">
-      <inertial>
-      <origin
-        xyz="${x} ${y} ${z}"
-        rpy="0 0 0" />
+  <xacro:macro name="box_inertial" params="m w h d">
+    <inertial>
       <mass value="${m}" />
       <inertia
         ixx="${m*(h*h+d*d)/12}"
