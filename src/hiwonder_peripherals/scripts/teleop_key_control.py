@@ -12,7 +12,7 @@ else:
   import tty, termios
 
 machine_type = os.environ.get('MACHINE_TYPE')
-if machine_type != 'JetRover_Acker':
+if machine_type != 'ROSLander_Acker':
     LIN_VEL = 0.2
     ANG_VEL = 0.5
 else:
@@ -75,7 +75,7 @@ if __name__ == "__main__":
         print(msg)
         while not rospy.is_shutdown():
             key = getKey()
-            if machine_type != 'JetRover_Acker':
+            if machine_type != 'ROSLander_Acker':
                 if key == 'w':
                     control_linear_vel = LIN_VEL
                 elif key == 'a':

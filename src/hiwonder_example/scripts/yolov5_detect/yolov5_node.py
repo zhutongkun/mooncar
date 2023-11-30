@@ -40,8 +40,8 @@ class Yolov5Node:
         self.yolov5 = YoLov5TRT(os.path.join(MODE_PATH, engine), os.path.join(MODE_PATH, lib), self.classes, conf_thresh)
         rospy.Service('/yolov5/start', Trigger, self.start_srv_callback)  # 进入玩法
         rospy.Service('/yolov5/stop', Trigger, self.stop_srv_callback)  # 退出玩法
-        camera = rospy.get_param('/depth_camera/camera_name', 'depth_cam')
-        self.image_sub = rospy.Subscriber('/%s/rgb/image_raw' % camera, Image, self.image_callback, queue_size=1)
+        camera = rospy.get_param('/gemini_camera/camera_name', 'gemini_camera')
+        self.image_sub = rospy.Subscriber('/%s/color/image_raw' % camera, Image, self.image_callback, queue_size=1)
 
         self.object_pub = rospy.Publisher('~object_detect', ObjectsInfo, queue_size=1)
         self.result_image_pub = rospy.Publisher('~object_image', Image, queue_size=1)

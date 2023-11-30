@@ -104,8 +104,8 @@ class BodyControlNode:
         self.last_status = 0
         
         self.machine_type = os.environ.get('MACHINE_TYPE')
-        camera = rospy.get_param('/depth_camera/camera_name', 'depth_cam')
-        self.image_sub = rospy.Subscriber('/%s/rgb/image_raw' % camera, Image, self.image_callback, queue_size=1)
+        camera = rospy.get_param('/astra_camera/camera_name', 'gemini_camera')
+        self.image_sub = rospy.Subscriber('/%s/color/image_raw' % camera, Image, self.image_callback, queue_size=1)
         self.joints_pub = rospy.Publisher('/servo_controllers/port_id_1/multi_id_pos_dur', MultiRawIdPosDur, queue_size=1)  # 舵机控制(servo control)
         self.mecanum_pub = rospy.Publisher('/hiwonder_controller/cmd_vel', Twist, queue_size=1)
         self.buzzer_pub = rospy.Publisher('/ros_robot_controller/set_buzzer', BuzzerState, queue_size=1)
@@ -240,21 +240,21 @@ class BodyControlNode:
                         if self.move_status[0]:
                             self.move_finish = False
                             self.last_status = 1
-                            if self.machine_type == 'JetRover_Mecanum':
+                            if self.machine_type == 'ROSLander_Mecanum':
                                 twist.linear.y = -0.3
-                            elif self.machine_type == 'JetRover_Tank':
+                            elif self.machine_type == 'ROSLander_Tank':
                                 twist.angular.z = -0.5
-                            elif self.machine_type == 'JetRover_Acker':
+                            elif self.machine_type == 'ROSLander_Acker':
                                 twist.angular.z = -1
                             threading.Thread(target=self.move, args=(twist, 1)).start()
                         elif self.move_status[1]:
                             self.move_finish = False
                             self.last_status = 2
-                            if self.machine_type == 'JetRover_Mecanum':
+                            if self.machine_type == 'ROSLander_Mecanum':
                                 twist.linear.y = 0.3
-                            elif self.machine_type == 'JetRover_Tank':
+                            elif self.machine_type == 'ROSLander_Tank':
                                 twist.angular.z = 0.5
-                            elif self.machine_type == 'JetRover_Acker':
+                            elif self.machine_type == 'ROSLander_Acker':
                                 twist.angular.z = 1
                             threading.Thread(target=self.move, args=(twist, 1)).start()
                         elif self.move_status[2]:

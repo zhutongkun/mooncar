@@ -8,11 +8,11 @@
     <arg     if="$(arg localization)"   name="args"  default=""/>
     <arg unless="$(arg localization)"   name="args"  default="--delete_db_on_start"/>
 
-    <arg     if="$(arg simulation)"     name="rgb_topic"   default="/depth_cam/rgb/image_raw"/>
-    <arg unless="$(arg simulation)"     name="rgb_topic"   default="/depth_cam/rgb/image_raw"/>
-    <arg     if="$(arg simulation)"     name="depth_topic" default="/depth_cam/depth/image_raw"/>
-    <arg unless="$(arg simulation)"     name="depth_topic" default="/depth_cam/depth/image_raw"/>
-    <arg name="camera_info_topic"       default="/depth_cam/rgb/camera_info"/>
+    <arg     if="$(arg simulation)"     name="rgb_topic"   default="astra_camera/color/image_raw"/>
+    <arg unless="$(arg simulation)"     name="rgb_topic"   default="astra_camera/color/image_raw"/>
+    <arg     if="$(arg simulation)"     name="depth_topic" default="astra_camera/depth/image_raw"/>
+    <arg unless="$(arg simulation)"     name="depth_topic" default="astra_camera/depth/image_raw"/>
+    <arg name="camera_info_topic"       default="astra_camera/color/camera_info"/>
 
     <arg name="scan_topic"          default="scan"/>
     <arg name="map_topic"           default="map"/>
@@ -25,7 +25,7 @@
     <node pkg="nodelet" type="nodelet" name="rgbd_sync" args="standalone rtabmap_ros/rgbd_sync" output="screen">
       <remap from="rgb/image"       to="$(arg rgb_topic)"/>
       <remap from="depth/image"     to="$(arg depth_topic)"/>
-      <remap from="rgb/camera_info" to="$(arg camera_info_topic)"/>
+      <remap from="color/camera_info" to="$(arg camera_info_topic)"/>
       <remap from="rgbd_image"      to="/rgbd_image"/> 
 
       <param name="approx_sync"       value="true"/>

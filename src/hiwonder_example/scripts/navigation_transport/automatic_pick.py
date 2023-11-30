@@ -304,7 +304,7 @@ def pick_handle(image):
                     angular_speed = 0
             
             if abs(linear_speed) == 0 and abs(angular_speed) == 0:
-                if machine_type == 'JetRover_Mecanum':
+                if machine_type == 'ROSLander_Mecanum':
                     count_turn += 1
                     if count_turn > 5:
                         count_turn = 5
@@ -437,8 +437,8 @@ if __name__ == '__main__':
     joints_pub = rospy.Publisher('/servo_controllers/port_id_1/multi_id_pos_dur', MultiRawIdPosDur, queue_size=1)
     mecnum_pub = rospy.Publisher('/hiwonder_controller/cmd_vel', Twist, queue_size=1)
     image_pub = rospy.Publisher('~image_result', Image, queue_size=1)
-    image_topic = rospy.get_param('depth_camera/camera_name', 'depth_cam')
-    rospy.Subscriber(image_topic + '/rgb/image_raw', Image, image_callback)
+    image_topic = rospy.get_param('gemini_camera/camera_name', 'gemini_camera')
+    rospy.Subscriber(image_topic + '/color/image_raw', Image, image_callback)
 
     rospy.Service('~pick', Trigger, start_pick_callback)
     rospy.Service('~place', Trigger, start_place_callback)

@@ -21,7 +21,7 @@ class JointStatePublisher:
         
         r = rospy.Rate(rate)
         self.machine_type = os.environ.get('MACHINE_TYPE')
-        if self.machine_type != 'JerRover_Acker':
+        if self.machine_type != 'ROSLander_Acker':
             self.joints = ['joint1', 'joint2', 'joint3', 'joint4', 'joint5', 'r_joint']
         else:
             self.joints = ['joint1', 'joint2', 'joint3', 'joint4', 'joint5', 'r_joint', 'w_joint']

@@ -172,8 +172,8 @@ if __name__ == '__main__':
 
     lane_detect = LaneDetector('yellow')
     rospy.init_node('lane_detect_test', anonymous=True)
-    camera = rospy.get_param('/depth_cam_name', 'depth_cam')
-    rospy.Subscriber('/%s/rgb/image_raw' % camera, Image, image_callback, queue_size=1)
+    camera = rospy.get_param('/depth_cam_name', 'gemini_camera')
+    rospy.Subscriber('/%s/color/image_raw' % camera, Image, image_callback, queue_size=1)
     while not rospy.is_shutdown():
         if image is not None:
             binary_image = lane_detect.get_binary(image)

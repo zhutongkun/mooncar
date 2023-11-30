@@ -22,11 +22,11 @@ i | α(i-1) | a(i-1) |       θ(i)      | d(i) |
 # 连杆长度(m)
 # 底座的高度，这里把第一个坐标系和第二个坐标的原点重合到一起了
 machine_type = os.environ.get('MACHINE_TYPE')
-if machine_type == 'JetRover_Acker':
+if machine_type == 'ROSLander_Acker':
     base_link = 0.05 + 0.0654868 + 0.0338648 + 0.0772047
-elif machine_type == 'JetRover_Mecanum':
+elif machine_type == 'ROSLander_Mecanum':
     base_link = 0.0965/2 + 0.067841 + 0.0338648 + 0.0772047 
-elif machine_type == 'JetRover_Tank':
+elif machine_type == 'ROSLander_Tank':
     base_link = 0.127 + 0.0338648 + 0.0772047 
 
 link1 = 0.130

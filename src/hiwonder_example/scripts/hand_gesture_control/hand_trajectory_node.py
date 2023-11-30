@@ -130,8 +130,8 @@ class HandTrajectoryNode:
         self.palm_detection = PalmDetection(score_threshold=0.6)
         self.hand_landmark = HandLandmark()
 
-        camera = rospy.get_param('/depth_camera/camera_name', 'depth_cam')  # 获取参数
-        rospy.Subscriber('/%s/rgb/image_raw' % camera, Image, self.image_callback)  # 摄像头订阅
+        camera = rospy.get_param('/astra_camera/camera_name', 'gemini_camera')  # 获取参数
+        rospy.Subscriber('/%s/color/image_raw' % camera, Image, self.image_callback)  # 摄像头订阅
         self.buzzer_pub = rospy.Publisher('/ros_robot_controller/set_buzzer', BuzzerState, queue_size=1)
         self.point_publisher = rospy.Publisher('~points', Points, queue_size=1)  # 使用~可以自动加上前缀名称
         self.result_publisher = rospy.Publisher('~image_result', Image, queue_size=1)  # 图像处理结果发布

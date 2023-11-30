@@ -46,7 +46,7 @@ class BodyControlNode:
         self.depth_frame = None
         self.center = None
         self.machine_type = os.environ.get('MACHINE_TYPE')
-        camera = rospy.get_param('/depth_camera/camera_name', 'depth_cam')
+        camera = rospy.get_param('/astra_camera/camera_name', 'gemini_camera')
         self.image_sub = rospy.Subscriber('/yolov5/object_image', Image, self.image_callback, queue_size=1)
         self.depth_image_sub = rospy.Subscriber('/%s/depth/image_raw' % camera, Image, self.depth_image_callback, queue_size=1)
         self.mecanum_pub = rospy.Publisher('/hiwonder_controller/cmd_vel', Twist, queue_size=1)
@@ -145,7 +145,7 @@ class BodyControlNode:
                 self.center[0] = w/2
             self.pid_angular.update(self.center[0] - w/2)  # 更新pid(update pid)
             twist.linear.x = self.linear_x
-            if self.machine_type != 'JetRover_Acker':
+            if self.machine_type != 'ROSLander_Acker':
                 twist.angular.z = misc.set_range(self.pid_angular.output, -0.8, 0.8)
             else:
                 twist.angular.z = twist.linear.x*math.tan(misc.set_range(self.pid_angular.output, -0.316, 0.316))/0.216

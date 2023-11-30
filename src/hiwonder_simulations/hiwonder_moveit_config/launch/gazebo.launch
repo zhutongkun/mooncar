@@ -19,7 +19,7 @@
     </include>
 
     <!-- send robot urdf to param server -->
-    <param name="robot_description" command="$(find xacro)/xacro '$(find hiwonder_description)/urdf/jetrover.gazebo.xacro' odom_frame:=$(arg odom_frame) base_frame:=$(arg base_frame)"/>
+    <param name="robot_description" command="$(find xacro)/xacro '$(find hiwonder_description)/urdf/roslander.gazebo.xacro' odom_frame:=$(arg odom_frame) base_frame:=$(arg base_frame)"/>
 
     <!-- push robot_description to factory and spawn robot in gazebo at the origin, change x,y,z arguments to spawn in a different position -->
     <node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model" args="-urdf -param robot_description -model hiwonder

@@ -26,7 +26,7 @@ class JoystickController:
         self.min_value = 0.1
         self.max_linear = rospy.get_param('~max_linear', 0.7)
         self.max_angular = rospy.get_param('~max_angular', 3.0)
-        self.machine = rospy.get_param('~machine', 'JetRover_Mecanum')
+        self.machine = rospy.get_param('~machine', 'ROSLander_Mecanum')
         self.disable_servo_control = rospy.get_param('~disable_servo_control', 'true')
         cmd_vel = rospy.get_param('~cmd_vel', 'hiwonder_controller/cmd_vel')
 
@@ -50,14 +50,14 @@ class JoystickController:
         if abs(axes['ry']) < self.min_value:
             axes['ry'] = 0
 
-        if self.machine == 'JetRover_Mecanum':
+        if self.machine == 'ROSLander_Mecanum':
             twist.linear.y = misc.val_map(axes['lx'], -1, 1, -self.max_linear, self.max_linear) 
             twist.linear.x = misc.val_map(axes['ly'], -1, 1, -self.max_linear, self.max_linear)
             twist.angular.z = misc.val_map(axes['rx'], -1, 1, -self.max_angular, self.max_angular)
-        elif self.machine == 'JetRover_Tank':
+        elif self.machine == 'ROSLander_Tank':
             twist.linear.x = misc.val_map(axes['ly'], -1, 1, -self.max_linear, self.max_linear)
             twist.angular.z = misc.val_map(axes['rx'], -1, 1, -self.max_angular, self.max_angular)
-        elif self.machine == 'JetRover_Acker':
+        elif self.machine == 'ROSLander_Acker':
             twist.linear.x = misc.val_map(axes['ly'], -1, 1, -self.max_linear, self.max_linear)
             steering_angle = misc.val_map(axes['rx'], -1, 1, -math.radians(150/1000*240), math.radians(150/1000*240))
             if twist.linear.x == 0:

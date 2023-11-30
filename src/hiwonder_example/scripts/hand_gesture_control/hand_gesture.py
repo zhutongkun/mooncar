@@ -89,7 +89,7 @@ class HandGestureControlNode:
             current_time = rospy.get_time()
             if status == 0 and t_start < current_time:
                 status = 1
-                if self.machine_type == 'JetRover_Acker':
+                if self.machine_type == 'ROSLander_Acker':
                     twist = args[0]
                     if twist.angular.z == 0:
                         self.mecanum_pub.publish(twist)
@@ -119,9 +119,9 @@ class HandGestureControlNode:
                 else:
                     twist = args[0]
                     self.mecanum_pub.publish(twist)
-                    if self.machine_type == 'JetRover_Mecanum':
+                    if self.machine_type == 'ROSLander_Mecanum':
                         t_start = current_time + args[1]/50.0/self.linear_speed
-                    elif self.machine_type == 'JetRover_Tank':
+                    elif self.machine_type == 'ROSLander_Tank':
                         if twist.angular.z == 0:
                             t_start = current_time + args[1]/50.0/self.linear_speed
                         else:
@@ -131,7 +131,7 @@ class HandGestureControlNode:
                 break
             rospy.sleep(0.01)
         
-        if self.machine_type == 'JetRover_Acker':
+        if self.machine_type == 'ROSLander_Acker':
             set_servos(self.joints_pub, 0.1, ((9, 500), ))
             motor1 = MotorState()
             motor1.id = 2
@@ -163,18 +163,18 @@ class HandGestureControlNode:
             twist = Twist()
             if 0 <= angle < 30:
                 if sum(left_and_right) > 0:
-                    if self.machine_type == 'JetRover_Mecanum':
+                    if self.machine_type == 'ROSLander_Mecanum':
                         twist.linear.y = self.linear_speed
-                    elif self.machine_type == 'JetRover_Tank':
+                    elif self.machine_type == 'ROSLander_Tank':
                         twist.angular.z = self.angular_speed
-                    elif self.machine_type == 'JetRover_Acker':
+                    elif self.machine_type == 'ROSLander_Acker':
                         twist.angular.z = 1
                 else:
-                    if self.machine_type == 'JetRover_Mecanum':
+                    if self.machine_type == 'ROSLander_Mecanum':
                         twist.linear.y = -self.linear_speed
-                    elif self.machine_type == 'JetRover_Tank':
+                    elif self.machine_type == 'ROSLander_Tank':
                         twist.angular.z = -self.angular_speed
-                    elif self.machine_type == 'JetRover_Acker':
+                    elif self.machine_type == 'ROSLander_Acker':
                         twist.angular.z = -1
             elif 60 < angle <= 90:
                 if sum(up_and_down) > 0:

@@ -8,22 +8,11 @@
 查看自启：sudo systemctl status start_app_node.service(check auto-start: sudo systemctl status start_app_node.service)
 -->
 <launch>
-    <!--自定义深度摄像头名称(custom depth camera name)-->
-    <arg name="depth_camera_name"   default="depth_cam"/>
-    <!--自定义深度摄像头rgb话题名称(custom depth camera rgb topic name)-->
-    <arg name="image_topic"         default="image_raw"/>
-    <!--获取当前设备类型, 具体类型在~/.typerc里定义(Acquire the type of the current device. The specific type is defined by ~/.typerc)-->
-    <arg name="machine_type"        default="$(env MACHINE_TYPE)"/>
-    <arg name="depth_camera_type"   default="$(env DEPTH_CAMERA_TYPE)"/>
-
     <!--底盘驱动(chassis driver)-->
     <include file="$(find hiwonder_controller)/launch/hiwonder_controller.launch"/>
 
     <!--深度摄像头(depth camera)-->
-    <!--<include file="$(find hiwonder_peripherals)/launch/depth_cam.launch">-->
-        <!--<arg name="depth_camera_name" value="$(arg depth_camera_name)"/>-->
-        <!--<arg name="image_topic" value="$(arg image_topic)"/>-->
-    <!--</include>-->
+    <include file="$(find hiwonder_peripherals)/launch/depth_cam.launch"/>
 
     <!--app画面传输(app image transimission)-->
     <node if="$(eval depth_camera_type != '')" name="web_video_server" pkg="web_video_server" respawn="true" respawn_delay="2"  type="web_video_server" output="screen"/>

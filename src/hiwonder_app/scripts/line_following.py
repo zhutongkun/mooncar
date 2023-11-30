@@ -25,7 +25,7 @@ class LineFollower:
     def __init__(self, color, node):
         self.node = node
         self.target_lab, self.target_rgb = color
-        self.rois = ((450, 480, 0, 640, 0.7), (390, 420, 0, 640, 0.2), (330, 360, 0, 640, 0.1))
+        self.rois = ((0.9375, 1, 0, 1, 0.7), (0.8125, 0.875, 0, 1, 0.2), (0.6875, 0.75, 0, 1, 0.1))
         self.weight_sum = 1.0
 
     @staticmethod
@@ -54,7 +54,7 @@ class LineFollower:
                      int(self.target_lab[2] + 50 * threshold)]
         target_color = self.target_lab, min_color, max_color
         for roi in self.rois:
-            blob = image[roi[0]:roi[1], roi[2]:roi[3]]  # 截取roi(intercept roi)
+            blob = image[int(roi[0]*h):int(roi[1]*h), int(roi[2]*w):int(roi[3]*w)]  # 截取roi(intercept roi)
             img_lab = cv2.cvtColor(blob, cv2.COLOR_RGB2LAB)  # rgb转lab(convert rgb into lab)
             img_blur = cv2.GaussianBlur(img_lab, (3, 3), 3)  # 高斯模糊去噪(perform Gaussian filtering to reduce noise)
             mask = cv2.inRange(img_blur, tuple(target_color[1]), tuple(target_color[2]))  # 二值化(image binarization)
@@ -65,9 +65,9 @@ class LineFollower:
             max_contour_area = self.get_area_max_contour(contours, 30)  # 获取最大面积对应轮廓(get the contour corresponding to the largest contour)
             if max_contour_area is not None:
                 rect = cv2.minAreaRect(max_contour_area[0])  # 最小外接矩形(minimum circumscribed rectangle)
-                box = np.int0(cv2.boxPoints(rect))  # 四个角(four corners)
+                box = np.intp(cv2.boxPoints(rect))  # 四个角(four corners)
                 for j in range(4):
-                    box[j, 1] = box[j, 1] + roi[0]
+                    box[j, 1] = box[j, 1] + int(roi[0] * h)
                 cv2.drawContours(result_image, [box], -1, (0, 255, 255), 2)  # 画出四个点组成的矩形(draw the rectangle composed of four points)
 
                 # 获取矩形对角点(acquire the diagonal points of the rectangle)
@@ -129,8 +129,8 @@ class LineFollowingNode:
             self.follower = None
             self.threshold = 0.1
             self.empty = 0
-            depth_camera = rospy.get_param('/depth_camera/camera_name', 'depth_cam')  # 获取参数(acquire the parameter)
-            self.image_sub = rospy.Subscriber('/%s/rgb/image_raw'%depth_camera, Image, self.image_callback)  # 摄像头订阅(subscribe to the camera)
+            depth_camera = rospy.get_param('/gemini_camera/camera_name', 'gemini_camera')  # 获取参数(acquire the parameter)
+            self.image_sub = rospy.Subscriber('/%s/color/image_raw'%depth_camera, Image, self.image_callback)  # 摄像头订阅(subscribe to the camera)
             self.lidar_sub = rospy.Subscriber('/scan', LaserScan, self.lidar_callback)  # 订阅雷达(subscribe to Lidar)
             set_servos(self.joints_pub, 1, ((10, 300), (5, 500), (4, 210), (3, 40), (2, 665), (1, 500)))
             self.mecanum_pub.publish(geo_msg.Twist())

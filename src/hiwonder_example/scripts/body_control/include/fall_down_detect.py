@@ -72,8 +72,8 @@ class FallDownDetectNode:
         self.move_finish = True
         self.stop_flag = False
 
-        camera = rospy.get_param('/depth_camera/camera_name', 'depth_cam')
-        self.image_sub = rospy.Subscriber('/%s/rgb/image_raw' % camera, Image, self.image_callback, queue_size=1)
+        camera = rospy.get_param('/astra_camera/camera_name', 'gemini_camera')
+        self.image_sub = rospy.Subscriber('/%s/color/image_raw' % camera, Image, self.image_callback, queue_size=1)
         self.mecanum_pub = rospy.Publisher('/hiwonder_controller/cmd_vel', Twist, queue_size=1)
         self.buzzer_pub = rospy.Publisher('/ros_robot_controller/set_buzzer', BuzzerState, queue_size=1)
         self.controller = ActionGroupController(use_ros=True)

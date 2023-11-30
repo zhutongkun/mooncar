@@ -60,8 +60,8 @@ class SelfDrivingNode:
         self.mecanum_pub = rospy.Publisher('/hiwonder_controller/cmd_vel', geo_msg.Twist, queue_size=1)  # 底盘控制
         # self.result_publisher = rospy.Publisher(self.name + '/image_result', Image, queue_size=1)  # 图像处理结果发布
         self.joints_pub = rospy.Publisher('servo_controllers/port_id_1/multi_id_pos_dur', MultiRawIdPosDur, queue_size=1)  # 舵机控制
-        camera = rospy.get_param('/depth_camera_name', 'depth_cam')  # 获取参数
-        self.camera_sub = rospy.Subscriber('/%s/rgb/image_raw' % camera, Image, self.image_callback)  # 摄像头订阅
+        camera = rospy.get_param('/gemini_camera/camera_name', 'gemini_camera')  # 获取参数
+        self.camera_sub = rospy.Subscriber('/%s/color/image_raw' % camera, Image, self.image_callback)  # 摄像头订阅
         rospy.Subscriber('/yolov5/object_detect', ObjectsInfo, self.get_object_callback)
         if not rospy.get_param('~only_line_follow', False):
             while not rospy.is_shutdown():
@@ -77,7 +77,7 @@ class SelfDrivingNode:
                     break
             except:
                 rospy.sleep(0.1)
-        if self.machine_type != 'JetRover_Tank':
+        if self.machine_type != 'ROSLander_Tank':
             set_servos(self.joints_pub, 1, ((10, 500), (5, 500), (4, 250), (3, 0), (2, 750), (1, 500)))  # 初始姿态
         else:
             set_servos(self.joints_pub, 1, ((10, 500), (5, 500), (4, 230), (3, 0), (2, 750), (1, 500)))  # 初始姿态
@@ -96,12 +96,12 @@ class SelfDrivingNode:
     
     # 泊车处理
     def park_action(self):
-        if self.machine_type == 'JetRover_Mecanum': 
+        if self.machine_type == 'ROSLander_Mecanum':
             twist = geo_msg.Twist()
             twist.linear.y = -0.2
             self.mecanum_pub.publish(twist)
             rospy.sleep(0.38/0.2)
-        elif self.machine_type == 'JetRover_Acker':
+        elif self.machine_type == 'ROSLander_Acker':
             twist = geo_msg.Twist()
             twist.linear.x = 0.15
             twist.angular.z = twist.linear.x*math.tan(-0.6)/0.213
@@ -173,13 +173,13 @@ class SelfDrivingNode:
                 # 检测到 停车标识+斑马线 就减速, 让识别稳定
                 if 0 < self.park_x and 180 < self.crosswalk_distance:
                     twist.linear.x = self.slow_down_speed
-                    if self.machine_type != 'JetRover_Acker':
+                    if self.machine_type != 'ROSLander_Acker':
                         if not self.start_park and 340 < self.crosswalk_distance:  # 离斑马线足够近时就开启停车
                             self.mecanum_pub.publish(geo_msg.Twist())
                             self.start_park = True
                             self.stop = True
                             threading.Thread(target=self.park_action).start()  
-                    elif self.machine_type == 'JetRover_Acker':
+                    elif self.machine_type == 'ROSLander_Acker':
                         if not self.start_park and 235 < self.crosswalk_distance:  # 离斑马线足够近时就开启停车
                             self.mecanum_pub.publish(geo_msg.Twist())
                             self.start_park = True
@@ -220,7 +220,7 @@ class SelfDrivingNode:
                             self.start_turn = True
                             self.count_turn = 0
                             self.start_turn_time_stamp = rospy.get_time()
-                        if self.machine_type != 'JetRover_Acker': 
+                        if self.machine_type != 'ROSLander_Acker':
                             twist.angular.z = -0.45  # 转弯速度
                         else:
                             twist.angular.z = twist.linear.x*math.tan(-0.6)/0.213  # 转弯速度
@@ -231,12 +231,12 @@ class SelfDrivingNode:
                         if not self.start_turn:
                             self.pid.SetPoint = 100  # 在车道中间时线的坐标
                             self.pid.update(lane_x)
-                            if self.machine_type != 'JetRover_Acker':
+                            if self.machine_type != 'ROSLander_Acker':
                                 twist.angular.z = misc.set_range(self.pid.output, -0.8, 0.8)
                             else:
                                 twist.angular.z = twist.linear.x*math.tan(misc.set_range(self.pid.output, -0.1, 0.1))/0.213
                         else:
-                            if self.machine_type == 'JetRover_Acker':
+                            if self.machine_type == 'ROSLander_Acker':
                                 twist.angular.z = 0.15*math.tan(-0.6)/0.213  # 转弯速度
                     self.mecanum_pub.publish(twist)
                 else:

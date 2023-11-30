@@ -53,7 +53,7 @@
 
     <group ns="$(arg robot_name)">
         <!--机器人urdf模型加载-->
-        <param if="$(arg sim)" name="robot_description" command="$(find xacro)/xacro '$(find hiwonder_description)/urdf/jetrover.xacro'" />
+        <param if="$(arg sim)" name="robot_description" command="$(find xacro)/xacro '$(find hiwonder_description)/urdf/roslander.xacro'" />
 
         <!--静态tf发布-->
         <node if="$(arg sim)"  pkg="robot_state_publisher" type="robot_state_publisher" name="robot_state_publisher" >

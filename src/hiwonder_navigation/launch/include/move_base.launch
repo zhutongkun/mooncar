@@ -66,7 +66,7 @@
         <param unless="$(arg use_teb)" name="base_local_planner"            value="dwa_local_planner/DWAPlannerROS"/>
         <param unless="$(arg use_teb)" name="DWAPlannerROS/global_frame_id" value="$(arg dwa_global_frame)"/>
 
-        <param if="$(eval use_teb and drive_type == 'diff-corrected' and robot_type == 'JetRover_Acker')" name="TebLocalPlannerROS/min_turning_radius" value="0.8"/>
+        <param if="$(eval use_teb and drive_type == 'diff-corrected' and robot_type == 'ROSLander_Acker')" name="TebLocalPlannerROS/min_turning_radius" value="0.8"/>
         <param if="$(eval use_teb and drive_type == 'omni')"  name="TebLocalPlannerROS/max_vel_x"               value="0.15"/>
         <param if="$(eval use_teb and drive_type == 'omni')"  name="TebLocalPlannerROS/max_vel_y"               value="0.15"/>
         <param if="$(eval use_teb and drive_type == 'omni')"  name="TebLocalPlannerROS/max_vel_x_backwards"     value="0.15"/>

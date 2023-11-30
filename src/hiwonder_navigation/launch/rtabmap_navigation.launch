@@ -53,7 +53,7 @@
             <arg name="localization"        value="true"/>
             <arg name="database_path"       value="$(arg rtabmap_map_path)"/>
             <arg name="subscribe_scan"      value="true"/>
-            <arg name="rgb_topic"           value="$(arg topic_prefix)/$(arg depth_camera_name)/rgb/image_raw" />
+            <arg name="rgb_topic"           value="$(arg topic_prefix)/$(arg depth_camera_name)/color/image_raw" />
             <arg name="depth_topic"         value="$(arg topic_prefix)/$(arg depth_camera_name)/depth/image_raw" />
             <arg name="camera_info_topic"   value="$(arg topic_prefix)/$(arg depth_camera_name)/depth/camera_info" />
             <arg name="scan_topic"          value="$(arg scan_topic)"/>

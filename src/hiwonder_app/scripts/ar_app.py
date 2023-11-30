@@ -105,9 +105,9 @@ class ARNode:
         with self.lock:
             self.obj = None
             self.target_model = None
-            depth_camera = rospy.get_param('/depth_camera/camera_name', 'depth_cam')  # 获取摄像头名称(get the camera name)
-            self.image_sub = rospy.Subscriber('/%s/rgb/image_raw'%depth_camera, Image, self.image_callback, queue_size=1)  # 订阅图像(subscribe to the image)
-            self.camera_info_sub = rospy.Subscriber('/%s/rgb/camera_info'%depth_camera, CameraInfo, self.camera_info_callback) # 订阅摄像头信息(subscribe to the camera information)
+            depth_camera = rospy.get_param('/gemini_camera/camera_name', 'gemini_camera')  # 获取摄像头名称(get the camera name)
+            self.image_sub = rospy.Subscriber('/%s/color/image_raw'%depth_camera, Image, self.image_callback, queue_size=1)  # 订阅图像(subscribe to the image)
+            self.camera_info_sub = rospy.Subscriber('/%s/color/camera_info'%depth_camera, CameraInfo, self.camera_info_callback) # 订阅摄像头信息(subscribe to the camera information)
         
         return TriggerResponse(success=True)
 

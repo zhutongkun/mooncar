@@ -27,10 +27,14 @@ class ObjectTracker:
         self.lost_target_count = 0
         self.target_lab, self.target_rgb = color
         self.weight_sum = 1.0
+        self.y_stop = 300
+        self.x_stop = 320
+        self.pro_size = (320, 180)
 
     def __call__(self, image, result_image, threshold):
         twist = geo_msg.Twist()
-        image = cv2.resize(image, (320, 240))
+        h, w = image.shape[:2]
+        image = cv2.resize(image, self.pro_size)
         image = cv2.cvtColor(image, cv2.COLOR_RGB2LAB)  # RGB转LAB空间
         image = cv2.GaussianBlur(image, (5, 5), 5)
 
@@ -66,24 +70,22 @@ class ObjectTracker:
         if circle is not None:
             self.lost_target_count = 0
             (x, y), r = circle
-            x = x / 320 * 640
-            y = y / 240 * 480
-            r = r / 320 * 640
+            x = x / self.pro_size[0] * w
+            y = y / self.pro_size[1] * h
+            r = r / self.pro_size[0] * w
 
-            cv2.circle(result_image, (320, 340), 5, (255, 255, 0), -1)
+            cv2.circle(result_image, (self.x_stop, self.y_stop), 5, (255, 255, 0), -1)
             result_image = cv2.circle(result_image, (int(x), int(y)), int(r), (255 - self.target_rgb[0],
                                                                                255 - self.target_rgb[1],
                                                                                255 - self.target_rgb[2]), 2)
-            vx = 0
-            vw = 0
-            if abs(y - 340) > 20:
-                self.pid_dist.update(y - 340)
-                twist.linear.x = misc.set_range(self.pid_dist.output, -0.35, 0.35)
+            if abs(y - self.y_stop) > 20:
+                self.pid_dist.update(y - self.y_stop)
+                twist.linear.x = common.set_range(self.pid_dist.output, -0.35, 0.35)
             else:
                 self.pid_dist.clear()
-            if abs(x - 320) > 20:
-                self.pid_yaw.update(x - 320)
-                twist.angular.z = misc.set_range(self.pid_yaw.output, -2, 2)
+            if abs(x - self.x_stop) > 20:
+                self.pid_yaw.update(x - self.x_stop)
+                twist.angular.z = common.set_range(self.pid_yaw.output, -2, 2)
             else:
                 self.pid_yaw.clear()
 
@@ -129,8 +131,8 @@ class OjbectTrackingNode:
             self.tracker = None
             self.color_picker = None
             self.dist_threshold = 0.3
-            depth_camera = rospy.get_param('/depth_camera/camera_name', 'depth_cam')
-            self.image_sub = rospy.Subscriber('/%s/rgb/image_raw' % depth_camera, Image, self.image_callback)
+            depth_camera = rospy.get_param('/gemini_camera/camera_name', 'gemini_camera')
+            self.image_sub = rospy.Subscriber('/%s/color/image_raw' % depth_camera, Image, self.image_callback)
             set_servos(self.joints_pub, 1, ((10, 300), (5, 500), (4, 210), (3, 40), (2, 750), (1, 500)))
             self.mecanum_pub.publish(geo_msg.Twist())
         return TriggerResponse(success=True)

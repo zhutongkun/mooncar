@@ -149,7 +149,7 @@ class LidarController:
             angle_index = int(angle / lidar_data.angle_increment + 0.50)
             left_range, right_range = np.array(left_ranges[:angle_index]), np.array(right_ranges[:angle_index])
             
-            if self.machine_type != 'JetRover_Acker':
+            if self.machine_type != 'ROSLander_Acker':
                 if self.running_mode == 1 and self.timestamp <= time.time():
                     left_nonzero = left_range.nonzero()
                     right_nonzero = right_range.nonzero()
