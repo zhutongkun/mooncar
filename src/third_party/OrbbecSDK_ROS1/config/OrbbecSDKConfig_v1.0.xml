@@ -7,7 +7,7 @@
         <!--Log output level, int type, optional values: 0-DEBUG, 1-INFO, 2-WARN, 3-ERROR, 4-FATAL, 5-OFF-->
         <!--Log level configuration execution priority: 0. Application code configuration > 1. Detailed configuration of configuration file (file & console configuration) > 2. Global configuration of configuration file > 3. SDK code default configuration (file: 0, terminal: 1)-->
         <!--Global log output level-->
-        <LogLevel>0</LogLevel>
+        <LogLevel>5</LogLevel>
         <!--File log output level-->
         <FileLogLevel>0</FileLogLevel>
         <!--Console log output level-->
