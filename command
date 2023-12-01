@@ -140,14 +140,14 @@ roslaunch hiwonder_navigation publish_point.launch
 #roslaunch hiwonder_navigation navigation.launch map:=地图名称 app:=true
 
 #3D建图
-#roslaunch hiwonder_slam slam.launch slam_methods:=rtabmap
+roslaunch hiwonder_slam slam.launch slam_methods:=rtabmap
 #rviz查看建图效果
-#roslaunch hiwonder_slam rviz_slam.launch slam_methods:=rtabmap
+roslaunch hiwonder_slam rviz_slam.launch slam_methods:=rtabmap
 
 #3D导航 
-#roslaunch hiwonder_navigation rtabmap_navigation.launch
+roslaunch hiwonder_navigation rtabmap_navigation.launch
 #rviz发布导航目标
-#roslaunch hiwonder_navigation rviz_rtabmap_navigation.launch
+roslaunch hiwonder_navigation rviz_rtabmap_navigation.launch
 
 #hiwonder_simulations
 #urdf可视化 

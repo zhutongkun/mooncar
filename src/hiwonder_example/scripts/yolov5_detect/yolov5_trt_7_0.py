@@ -432,8 +432,8 @@ if __name__ == "__main__":
     else:
         fps = fps.FPS() 
         try:
-            cap = cv2.VideoCapture("/dev/depth_cam")
-            #cap = cv2.VideoCapture("/dev/usb_cam")
+            cap = cv2.VideoCapture("/dev/gemini_camera")
+            #cap = cv2.VideoCapture("/dev/astra_camera")
             while True:
                 t = time.time()
                 ret, frame = cap.read()

@@ -29,8 +29,8 @@
       <remap from="rgb/camera_info" to="$(arg camera_info_topic)"/>
       <remap from="rgbd_image"      to="/rgbd_image"/> 
 
-      <!--<param name="approx_sync"       value="true"/>-->
-      <!--<param name="approx_sync_max_interval" value="0.008"/>-->
+      <param name="approx_sync"       value="true"/>
+      <param name="approx_sync_max_interval" value="0.008"/>
     </node>
 
     <!-- Mapping -->

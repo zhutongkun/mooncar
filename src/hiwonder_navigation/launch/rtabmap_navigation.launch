@@ -24,7 +24,7 @@
     <arg name="use_dwa"             default="false"/>
     <arg name="clicked_point"       default="$(arg topic_prefix)/clicked_point"/>
     <arg name="move_base_result"    default="$(arg topic_prefix)/move_base/result"/>
-    <arg name="depth_camera_name"   default="depth_cam"/>
+    <arg name="depth_camera_name"   default="astra_camera"/>
     <arg name="rtabmap_map_path"    default="~/.ros/rtabmap.db"/>
 
     <include file="$(find hiwonder_slam)/launch/include/hiwonder_robot.launch"/>
