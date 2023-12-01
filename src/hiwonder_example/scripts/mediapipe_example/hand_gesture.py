@@ -122,8 +122,8 @@ class HandGestureNode:
         self.state = State.NULL
         self.points = []
         self.count = 0
-        self.cap = cv2.VideoCapture("/dev/depth_cam")
-        #self.cap = cv2.VideoCapture("/dev/usb_cam")
+        self.cap = cv2.VideoCapture("/dev/astra_camera")
+        #self.cap = cv2.VideoCapture("/dev/gemini_camera")
         self.image_proc()
 
     def image_proc(self):

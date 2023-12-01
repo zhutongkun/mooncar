@@ -27,7 +27,7 @@
         <!--<arg name="app"     value="$(arg app)"/>-->
         <arg name="camera_name" value="$(arg astra_camera_name)" />
         <arg name="tf_prefix"   value="$(arg tf_prefix)"/>
-        <arg name="usb_port"    value="1-2.1.2.1"/>
+        <arg name="usb_port"    value="1-2.4.1"/>
         <arg if="$(eval depth_camera_type == 'AstraProPlus')" name="device_num"  value="1"/>
         <arg if="$(eval depth_camera_type != 'AstraProPlus')" name="device_num"  value="2"/>
     </include>

@@ -4,7 +4,7 @@ moveit_setup_assistant_config:
     relative_path: urdf/roslander.xacro
     xacro_args: ""
   SRDF:
-    relative_path: config/hiwonder_tank.srdf
+    relative_path: config/hiwonder_mecanum.srdf
   CONFIG:
     author_name: hiwonder
     author_email: hiwonder@gmail.com

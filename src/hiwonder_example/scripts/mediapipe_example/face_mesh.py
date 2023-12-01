@@ -9,8 +9,8 @@ mp_face_mesh = mp.solutions.face_mesh
 
 # For webcam input:
 drawing_spec = mp_drawing.DrawingSpec(thickness=1, circle_radius=1)
-cap = cv2.VideoCapture("/dev/depth_cam")
-#cap = cv2.VideoCapture("/dev/usb_cam")
+cap = cv2.VideoCapture("/dev/astra_camera")
+#cap = cv2.VideoCapture("/dev/generic_camera")
 print('\n******Press any key to exit!******')
 fps = fps.FPS()
 with mp_face_mesh.FaceMesh(

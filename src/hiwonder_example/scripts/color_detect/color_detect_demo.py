@@ -121,8 +121,8 @@ def run(img):
     return img
 
 if __name__ == '__main__':
-    cap = cv2.VideoCapture("/dev/depth_cam")
-    # cap = cv2.VideoCapture("/dev/usb_cam")
+    cap = cv2.VideoCapture("/dev/astra_camera")
+    # cap = cv2.VideoCapture("/dev/generic_camera")
     while True:
         ret, frame = cap.read()
         if ret:

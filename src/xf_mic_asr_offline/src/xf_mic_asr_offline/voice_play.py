@@ -12,7 +12,7 @@ def get_path(f, language='Chinese'):
     else:    
         return os.path.join(wav_path, 'english', f + '.wav')
 
-def play(voice, volume=100, language='Chinese'):
+def play(voice, volume=80, language='Chinese'):
     try:
         os.system('amixer -q -D pulse set Master {}%'.format(volume))
         os.system('play -q ' + get_path(voice, language))

@@ -9,6 +9,6 @@
         </gazebo>
     </xacro:macro>
 
-    <xacro:model_color link_name="depth_cam_link"       color_name="black"/>
-    <xacro:model_color link_name="depth_cam_link_arm"   color_name="black"/>
+    <xacro:model_color link_name="astra_camera_link"       color_name="black"/>
+    <xacro:model_color link_name="gemini_camera_link"   color_name="black"/>
 </robot>

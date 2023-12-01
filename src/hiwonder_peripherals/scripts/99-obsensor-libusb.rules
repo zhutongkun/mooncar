@@ -10,14 +10,18 @@ SUBSYSTEMS=="usb", ATTRS{idVendor}=="2bc5", ATTRS{idProduct}=="0536", MODE:="066
 SUBSYSTEMS=="usb", ATTRS{idVendor}=="2bc5", ATTRS{idProduct}=="0537", MODE:="0666",  OWNER:="root", GROUP:="video", SYMLINK+="Astra+s_rgb"
 SUBSYSTEMS=="usb", ATTRS{idVendor}=="2bc5", ATTRS{idProduct}=="0660", MODE:="0666",  OWNER:="root", GROUP:="video", SYMLINK+="AstraII"
 SUBSYSTEMS=="usb", ATTRS{idVendor}=="2bc5", ATTRS{idProduct}=="060f", MODE:="0666",  OWNER:="root", GROUP:="video", SYMLINK+="AstraPlus"
-SUBSYSTEMS=="usb", ATTRS{idVendor}=="2bc5", ATTRS{idProduct}=="050f", MODE:="0666",  OWNER:="root", GROUP:="video", SYMLINK+="astra_cam"
+SUBSYSTEMS=="usb", ATTRS{idVendor}=="2bc5", ATTRS{idProduct}=="050f", MODE:="0666",  OWNER:="root", GROUP:="video", SYMLINK+="AstraPlus_rgb"
 SUBSYSTEMS=="usb", ATTRS{idVendor}=="2bc5", ATTRS{idProduct}=="0670", MODE:="0666",  OWNER:="root", GROUP:="video", SYMLINK+="Orbbec Gemini 2"
 SUBSYSTEMS=="usb", ATTRS{idVendor}=="2bc5", ATTRS{idProduct}=="0671", MODE:="0666",  OWNER:="root", GROUP:="video", SYMLINK+="Orbbec Gemini 2 XL"
 SUBSYSTEMS=="usb", ATTRS{idVendor}=="2bc5", ATTRS{idProduct}=="0673", MODE:="0666",  OWNER:="root", GROUP:="video", SYMLINK+="Orbbec Gemini 2 L"
 SUBSYSTEMS=="usb", ATTRS{idVendor}=="2bc5", ATTRS{idProduct}=="0675", MODE:="0666",  OWNER:="root", GROUP:="video", SYMLINK+="Orbbec Gemini 2 VL"
 SUBSYSTEMS=="usb", ATTRS{idVendor}=="2bc5", ATTRS{idProduct}=="0701", MODE:="0666",  OWNER:="root", GROUP:="video", SYMLINK+="Dabai DCL"
 SUBSYSTEMS=="usb", ATTRS{idVendor}=="2bc5", ATTRS{idProduct}=="069d", MODE:="0666",  OWNER:="root", GROUP:="video", SYMLINK+="Astra Pro2"
-SUBSYSTEMS=="usb", ATTRS{idVendor}=="2bc5", ATTRS{idProduct}=="0511", MODE:="0666",  OWNER:="root", GROUP:="video", SYMLINK+="gemini_cam"
+#SUBSYSTEMS=="usb", ATTRS{idVendor}=="2bc5", ATTRS{idProduct}=="050f", MODE:="0666",  OWNER:="root", GROUP:="video", SYMLINK+="astra_camera"
+#SUBSYSTEMS=="usb", ATTRS{idVendor}=="2bc5", ATTRS{idProduct}=="0511", MODE:="0666",  OWNER:="root", GROUP:="video", SYMLINK+="gemini_camera"
+
+KERNEL=="video*", ATTRS{idVendor}=="2bc5", ATTRS{idProduct}=="050f", MODE:="0777", SYMLINK+="astra_camera"
+KERNEL=="video*", ATTRS{idVendor}=="2bc5", ATTRS{idProduct}=="0511", MODE:="0777", SYMLINK+="gemini_camera"
 
 # OpenNI Modules
 SUBSYSTEM=="usb", ATTR{idProduct}=="0401", ATTR{idVendor}=="2bc5", MODE:="0666", OWNER:="root", GROUP:="video", SYMLINK+="astra"

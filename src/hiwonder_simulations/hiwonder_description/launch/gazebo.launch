@@ -20,7 +20,7 @@
     </group>
     <group if="$(eval camera_type != 'AstraProPlus')">
         <node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model" args="-urdf -param robot_description -model hiwonder
-            -x 0 -y 0 -z 0 -Y 0 -J joint1 0 -J joint2 -0.83776 -J joint3 -2.03156 -J joint4 -1.19380 -J r_joint 0.5" respawn="false" output="screen" />
+            -x 0 -y 0 -z 0 -Y 0 -J joint1 0 -J joint2 -0.83776 -J joint3 2.03156 -J joint4 1.19380 -J r_joint 0.5" respawn="false" output="screen" />
     </group>
     <include file="$(find hiwonder_moveit_config)/launch/ros_controllers.launch"/>
 </launch>

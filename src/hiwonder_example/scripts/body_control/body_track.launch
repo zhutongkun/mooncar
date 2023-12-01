@@ -17,8 +17,8 @@
             "hair drier", "toothbrush"]</rosparam>
     <node pkg="hiwonder_example" type="yolov5_node.py" name="$(arg node_name)" output="screen">
         <param name="use_depth_cam" value="true"/>
-        <param name="engine"        value="yolov5n.engine"/>
-        <param name="lib"           value="libmyplugins_640.so"/>
+        <param name="engine"        value="yolov5l.engine"/>
+        <param name="lib"           value="libmyplugins.so"/>
         <param name="conf_thresh"   value="0.8"/>
     </node>
 

@@ -34,7 +34,7 @@ class ColorDetectNode:
         self.circle_roi = rospy.get_param('~roi_circle')
         self.rect_roi = rospy.get_param('~roi_rect')
 
-        camera = rospy.get_param('/astra_camera/camera_name', 'gemini_camera')  # 获取参数
+        camera = rospy.get_param('/gemini_camera/camera_name', 'gemini_camera')  # 获取参数
         rospy.Subscriber('/%s/color/image_raw' % camera, Image, self.image_callback)  # 摄像头订阅
 
         self.info_publisher = rospy.Publisher('~color_info', ColorsInfo, queue_size=1)

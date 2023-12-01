@@ -8,8 +8,8 @@ mp_face_detection = mp.solutions.face_detection
 mp_drawing = mp.solutions.drawing_utils
 
 # For webcam input:
-cap = cv2.VideoCapture("/dev/depth_cam")
-#cap = cv2.VideoCapture("/dev/usb_cam")
+cap = cv2.VideoCapture("/dev/astra_camera")
+#cap = cv2.VideoCapture("/dev/generic_camera")
 print('\n******Press any key to exit!******')
 fps = fps.FPS()
 with mp_face_detection.FaceDetection(min_detection_confidence=0.5) as face_detection:

@@ -17,8 +17,8 @@ except:
 mp_holistic = mp.solutions.holistic
 
 # For webcam input:
-cap = cv2.VideoCapture("/dev/depth_cam")
-#cap = cv2.VideoCapture("/dev/usb_cam")
+cap = cv2.VideoCapture("/dev/astra_camera")
+#cap = cv2.VideoCapture("/dev/gemini_camera")
 print('\n******Press any key to exit!******')
 fps = fps.FPS()
 with mp_holistic.Holistic(

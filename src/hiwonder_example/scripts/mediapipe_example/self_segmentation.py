@@ -10,8 +10,8 @@ mp_selfie_segmentation = mp.solutions.selfie_segmentation
 
 # For webcam input:
 BG_COLOR = (192, 192, 192) # gray
-cap = cv2.VideoCapture("/dev/depth_cam")
-#cap = cv2.VideoCapture("/dev/usb_cam")
+cap = cv2.VideoCapture("/dev/astra_camera")
+#cap = cv2.VideoCapture("/dev/gemini_camera")
 print('\n******Press any key to exit!******')
 fps = fps.FPS()
 with mp_selfie_segmentation.SelfieSegmentation(
@@ -39,7 +39,7 @@ with mp_selfie_segmentation.SelfieSegmentation(
     # To improve segmentation around boundaries, consider applying a joint
     # bilateral filter to "results.segmentation_mask" with "image".
     condition = np.stack(
-            (results.segmentation_mask[:, :, 0],) * 3, axis=-1) > 0.1
+            (results.segmentation_mask,) * 3, axis=-1) > 0.1
     # The background can be customized.
     #   a) Load an image (with the same width and height of the input image) to
     #      be the background, e.g., bg_image = cv2.imread('/path/to/image/file')

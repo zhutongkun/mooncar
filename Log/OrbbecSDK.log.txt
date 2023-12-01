@@ -1,0 +1,50 @@
+[12/01 14:31:22.947559][debug][20111][Context.cpp:29] Context creating. work_dir=/home/hiwonder/ros_ws
+[12/01 14:31:22.947842][debug][20111][Context.cpp:48] Config file version=1.1
+[12/01 14:31:22.947899][debug][20111][FrameBufferManager.cpp:23] Max global frame buffer size updated! size=2048.000MB
+[12/01 14:31:22.947920][info][20111][Context.cpp:67] Context created with config: default config!
+[12/01 14:31:22.947970][info][20111][Context.cpp:72] Context work_dir=/home/hiwonder/ros_ws
+[12/01 14:31:22.947999][debug][20111][DeviceManager.cpp:30] DeviceManager init ...
+[12/01 14:31:22.948006][debug][20111][LinuxPal.cpp:36] createObPal: create LinuxPal!
+[12/01 14:31:22.956970][debug][20111][DeviceManager.cpp:34] Enable USB Device Enumerator ...
+[12/01 14:31:23.039831][debug][20111][EnumeratorLibusb.cpp:323] queryDevicesInfo done!
+[12/01 14:31:23.040172][debug][20111][UsbDeviceEnumerator.cpp:161] Current usb device port list:
+[12/01 14:31:23.040189][debug][20111][UsbDeviceEnumerator.cpp:164]  - 1-2.4.2-17.0 | USB Camera
+[12/01 14:31:23.040194][debug][20111][UsbDeviceEnumerator.cpp:164]  - 1-2.4.1-14.0 | Orbbec(R) Astra(TM) 3D Camera(F) Depth
+[12/01 14:31:23.040199][debug][20111][UsbDeviceEnumerator.cpp:164]  - 1-2.4.1-14.1 | Orbbec(R) Astra(TM) Audio Devive
+[12/01 14:31:23.040202][debug][20111][UsbDeviceEnumerator.cpp:164]  - 1-2.3.2-15.0 | Orbbec(R) Astra(TM) 3D Camera(F) Depth
+[12/01 14:31:23.040205][debug][20111][UsbDeviceEnumerator.cpp:164]  - 1-2.3.1-11.0 | USB Camera
+[12/01 14:31:23.040277][warning][20111][OpenNIDeviceInfo.cpp:180] New openni device matched.
+[12/01 14:31:23.040327][warning][20111][OpenNIDeviceInfo.cpp:180] New openni device matched.
+[12/01 14:31:23.040626][info][20111][LinuxPal.cpp:110] Create PollingDeviceWatcher!
+[12/01 14:31:23.040656][debug][20111][UsbDeviceEnumerator.cpp:69] Found 2 device(s):
+[12/01 14:31:23.040670][debug][20111][UsbDeviceEnumerator.cpp:72]   - Name: Astra Pro Plus, PID: 0x060F, SN/ID: , connection: USB2.0
+[12/01 14:31:23.040676][debug][20111][UsbDeviceEnumerator.cpp:72]   - Name: SV1301S_U3, PID: 0x0614, SN/ID: , connection: USB2.0
+[12/01 14:31:23.040693][info][20111][DeviceManager.cpp:15] Current found device(s): (2)
+[12/01 14:31:23.040708][info][20111][DeviceManager.cpp:24] 	- Name: Astra Pro Plus, PID: 0x060f, SN/ID: , Connection: USB2.0
+[12/01 14:31:23.040741][info][20111][DeviceManager.cpp:24] 	- Name: SV1301S_U3, PID: 0x0614, SN/ID: , Connection: USB2.0
+[12/01 14:31:23.040776][debug][20111][DeviceManager.cpp:55] DeviceManager construct done!
+[12/01 14:33:43.822312][debug][21762][Context.cpp:29] Context creating. work_dir=/home/hiwonder/ros_ws
+[12/01 14:33:43.822599][debug][21762][Context.cpp:48] Config file version=1.1
+[12/01 14:33:43.822642][debug][21762][FrameBufferManager.cpp:23] Max global frame buffer size updated! size=2048.000MB
+[12/01 14:33:43.822659][info][21762][Context.cpp:67] Context created with config: default config!
+[12/01 14:33:43.822715][info][21762][Context.cpp:72] Context work_dir=/home/hiwonder/ros_ws
+[12/01 14:33:43.822754][debug][21762][DeviceManager.cpp:30] DeviceManager init ...
+[12/01 14:33:43.822763][debug][21762][LinuxPal.cpp:36] createObPal: create LinuxPal!
+[12/01 14:33:43.831374][debug][21762][DeviceManager.cpp:34] Enable USB Device Enumerator ...
+[12/01 14:33:44.006484][debug][21762][EnumeratorLibusb.cpp:323] queryDevicesInfo done!
+[12/01 14:33:44.008951][debug][21762][UsbDeviceEnumerator.cpp:161] Current usb device port list:
+[12/01 14:33:44.008986][debug][21762][UsbDeviceEnumerator.cpp:164]  - 1-2.4.2-17.0 | USB Camera
+[12/01 14:33:44.008991][debug][21762][UsbDeviceEnumerator.cpp:164]  - 1-2.4.1-14.0 | Orbbec(R) Astra(TM) 3D Camera(F) Depth
+[12/01 14:33:44.008996][debug][21762][UsbDeviceEnumerator.cpp:164]  - 1-2.4.1-14.1 | Orbbec(R) Astra(TM) Audio Devive
+[12/01 14:33:44.009000][debug][21762][UsbDeviceEnumerator.cpp:164]  - 1-2.3.2-15.0 | Orbbec(R) Astra(TM) 3D Camera(F) Depth
+[12/01 14:33:44.009004][debug][21762][UsbDeviceEnumerator.cpp:164]  - 1-2.3.1-11.0 | USB Camera
+[12/01 14:33:44.009105][warning][21762][OpenNIDeviceInfo.cpp:180] New openni device matched.
+[12/01 14:33:44.009238][warning][21762][OpenNIDeviceInfo.cpp:180] New openni device matched.
+[12/01 14:33:44.009533][info][21762][LinuxPal.cpp:110] Create PollingDeviceWatcher!
+[12/01 14:33:44.009567][debug][21762][UsbDeviceEnumerator.cpp:69] Found 2 device(s):
+[12/01 14:33:44.009581][debug][21762][UsbDeviceEnumerator.cpp:72]   - Name: Astra Pro Plus, PID: 0x060F, SN/ID: , connection: USB2.0
+[12/01 14:33:44.009585][debug][21762][UsbDeviceEnumerator.cpp:72]   - Name: SV1301S_U3, PID: 0x0614, SN/ID: , connection: USB2.0
+[12/01 14:33:44.009607][info][21762][DeviceManager.cpp:15] Current found device(s): (2)
+[12/01 14:33:44.009638][info][21762][DeviceManager.cpp:24] 	- Name: Astra Pro Plus, PID: 0x060f, SN/ID: , Connection: USB2.0
+[12/01 14:33:44.009650][info][21762][DeviceManager.cpp:24] 	- Name: SV1301S_U3, PID: 0x0614, SN/ID: , Connection: USB2.0
+[12/01 14:33:44.009681][debug][21762][DeviceManager.cpp:55] DeviceManager construct done!
