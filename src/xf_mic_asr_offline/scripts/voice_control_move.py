@@ -81,7 +81,7 @@ class VoiceControlNode:
             self.play('awake')
         elif self.words == '休眠(Sleep)':
             msg = BuzzerState()
-            msg.freq = 2000
+            msg.freq = 1900
             msg.on_time = 0.05
             msg.off_time = 0.01
             msg.repeat = 1

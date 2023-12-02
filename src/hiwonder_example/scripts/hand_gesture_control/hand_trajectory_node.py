@@ -164,7 +164,7 @@ class HandTrajectoryNode:
 
     def buzzer_warn(self):
         msg = BuzzerState()
-        msg.freq = 1800
+        msg.freq = 1900
         msg.on_time = 0.2
         msg.off_time = 0.01
         msg.repeat = 1
