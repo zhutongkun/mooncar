@@ -2,7 +2,7 @@
 <!--1-2.1:1.0  1-2.3:1.0-->
 <!--1-2.2:1.0  1-2.4:1.0-->
 <launch>
-    <arg name="depth_camera_type"   value="$(env DEPTH_CAMERA_TYPE)"/>
+    <arg name="depth_camera_type"   default="$(env DEPTH_CAMERA_TYPE)"/>
     <arg name="astra_camera_name"   default="astra_camera" />
     <arg name="gemini_camera_name"  default="gemini_camera" />
     <arg name="image_topic"         default="image_raw" />

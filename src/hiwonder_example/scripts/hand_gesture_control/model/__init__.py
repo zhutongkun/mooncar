@@ -1,2 +1,0 @@
-from model.palm_detection.palm_detection import PalmDetection
-from model.hand_landmark.hand_landmark import HandLandmark

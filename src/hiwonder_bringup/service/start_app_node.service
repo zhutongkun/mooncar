@@ -8,7 +8,7 @@ User=hiwonder
 Restart=always
 RestartSec=30
 KillMode=mixed
-ExecStart=/home/hiwonder/ros_ws/src/hiwonder_bringup/scripts/source_env.bash roslaunch hiwonder_bringup bringup.launch
+ExecStart=/home/hiwonder/ros_ws/src/hiwonder_bringup/scripts/start_app.sh
 StandardOutput=null
 StandardError=null
 

@@ -27,7 +27,7 @@ class ObjectTracker:
         self.lost_target_count = 0
         self.target_lab, self.target_rgb = color
         self.weight_sum = 1.0
-        self.y_stop = 300
+        self.y_stop = 330
         self.x_stop = 320
         self.pro_size = (320, 180)
 
@@ -80,12 +80,12 @@ class ObjectTracker:
                                                                                255 - self.target_rgb[2]), 2)
             if abs(y - self.y_stop) > 20:
                 self.pid_dist.update(y - self.y_stop)
-                twist.linear.x = common.set_range(self.pid_dist.output, -0.35, 0.35)
+                twist.linear.x = misc.set_range(self.pid_dist.output, -0.35, 0.35)
             else:
                 self.pid_dist.clear()
             if abs(x - self.x_stop) > 20:
                 self.pid_yaw.update(x - self.x_stop)
-                twist.angular.z = common.set_range(self.pid_yaw.output, -2, 2)
+                twist.angular.z = misc.set_range(self.pid_yaw.output, -2, 2)
             else:
                 self.pid_yaw.clear()
 

@@ -9,10 +9,10 @@
 -->
 <launch>
     <!--底盘驱动(chassis driver)-->
-    <include file="$(find hiwonder_controller)/launch/hiwonder_controller.launch"/>
+    <!--<include file="$(find hiwonder_controller)/launch/hiwonder_controller.launch"/>-->
 
     <!--深度摄像头(depth camera)-->
-    <include file="$(find hiwonder_peripherals)/launch/depth_cam.launch"/>
+    <!--<include file="$(find hiwonder_peripherals)/launch/depth_cam.launch"/>-->
 
     <!--app画面传输(app image transimission)-->
     <node name="web_video_server" pkg="web_video_server" respawn="true" respawn_delay="2"  type="web_video_server" output="screen"/>
@@ -21,7 +21,7 @@
     <include file="$(find hiwonder_bringup)/launch/rosbridge.launch"/>
 
     <!--app功能(app function)-->
-    <include file="$(find hiwonder_app)/launch/start_app.launch"/>
+    <!--<include file="$(find hiwonder_app)/launch/start_app.launch"/>-->
 
     <!--手柄控制(handle control)-->
     <include file="$(find hiwonder_peripherals)/launch/joystick_control.launch"/>

@@ -132,7 +132,7 @@ class LineFollowingNode:
             depth_camera = rospy.get_param('/gemini_camera/camera_name', 'gemini_camera')  # 获取参数(acquire the parameter)
             self.image_sub = rospy.Subscriber('/%s/color/image_raw'%depth_camera, Image, self.image_callback)  # 摄像头订阅(subscribe to the camera)
             self.lidar_sub = rospy.Subscriber('/scan', LaserScan, self.lidar_callback)  # 订阅雷达(subscribe to Lidar)
-            set_servos(self.joints_pub, 1, ((10, 300), (5, 500), (4, 210), (3, 40), (2, 665), (1, 500)))
+            set_servos(self.joints_pub, 1, ((10, 300), (5, 500), (4, 200), (3, 40), (2, 650), (1, 500)))
             self.mecanum_pub.publish(geo_msg.Twist())
         return TriggerResponse(success=True)
 
