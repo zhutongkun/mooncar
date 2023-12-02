@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <robot xmlns:xacro="http://ros.org/wiki/xacro">
-    <gazebo reference="lidar_frame">
+    <gazebo reference="lidar_sim_frame">
       <sensor type="ray" name="lidar">
         <pose>0 0 0 0 0 0</pose>
         <visualize>false</visualize>
@@ -27,7 +27,7 @@
         </ray>
         <plugin name="gazebo_rplidar" filename="libgazebo_ros_laser.so">
           <topicName>scan_raw</topicName>
-          <frameName>lidar_frame</frameName>
+          <frameName>$(arg lidar_frame)</frameName>
         </plugin>
       </sensor>
     </gazebo>

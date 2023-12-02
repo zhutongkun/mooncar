@@ -5,7 +5,9 @@
 # 无人驾驶
 import os
 import cv2
+import time
 import math
+import queue
 import rospy
 import signal
 import threading
@@ -29,6 +31,7 @@ class SelfDrivingNode:
         self.is_running = True
         self.pid = pid.PID(0.01, 0.0, 0.0)
 
+        self.objects_info = []
         self.detect_far_lane = False
         self.park_x = -1  # 停车标识的x像素坐标
 
@@ -52,13 +55,15 @@ class SelfDrivingNode:
         self.slow_down_speed = 0.1  # 减速行驶的速度
 
         self.traffic_signs_status = None  # 记录红绿灯状态
+        
+        self.image_queue = queue.Queue(maxsize=1)
+        self.classes = ['go', 'right', 'park', 'red', 'green', 'crosswalk']
 
-        self.colors = common.Colors()
         signal.signal(signal.SIGINT, self.shutdown)
         self.machine_type = os.environ.get('MACHINE_TYPE')
         self.lane_detect = lane_detect.LaneDetector("yellow")
         self.mecanum_pub = rospy.Publisher('/hiwonder_controller/cmd_vel', geo_msg.Twist, queue_size=1)  # 底盘控制
-        # self.result_publisher = rospy.Publisher(self.name + '/image_result', Image, queue_size=1)  # 图像处理结果发布
+        self.result_publisher = rospy.Publisher(self.name + '/image_result', Image, queue_size=1)  # 图像处理结果发布
         self.joints_pub = rospy.Publisher('servo_controllers/port_id_1/multi_id_pos_dur', MultiRawIdPosDur, queue_size=1)  # 舵机控制
         camera = rospy.get_param('/gemini_camera/camera_name', 'gemini_camera')  # 获取参数
         self.camera_sub = rospy.Subscriber('/%s/color/image_raw' % camera, Image, self.image_callback)  # 摄像头订阅
@@ -91,8 +96,16 @@ class SelfDrivingNode:
         rospy.loginfo('shutdown')
 
     def image_callback(self, ros_image):  # 目标检查回调
-        rgb_image = np.ndarray(shape=(ros_image.height, ros_image.width, 3), dtype=np.uint8, buffer=ros_image.data) # 原始 RGB 画面
-        self.image = rgb_image
+        bgr_image = np.ndarray(shape=(ros_image.height, ros_image.width, 3), dtype=np.uint8, buffer=ros_image.data)  # 将自定义图像消息转化为图像
+        if not self.image_queue.empty():
+            try:
+                self.image_queue.get_nowait()
+            except queue.Empty:
+                pass
+        try:
+            self.image_queue.put_nowait(bgr_image)
+        except queue.Full:
+            pass
     
     # 泊车处理
     def park_action(self):
@@ -140,127 +153,146 @@ class SelfDrivingNode:
 
     def image_proc(self):
         while self.is_running:
-            if self.image is not None:
-                h, w = self.image.shape[:2]
+            time_start = time.time()
+            image = self.image_queue.get(block=True)
+            result_image = image.copy()
+            h, w = image.shape[:2]
 
-                # 获取车道线的二值化图
-                binary_image = self.lane_detect.get_binary(self.image)
-                # 检测到斑马线,开启减速标志
-                if 450 < self.crosswalk_distance and not self.start_slow_down:  # 只有足够近时才开始减速
-                    self.count_crosswalk += 1
-                    if self.count_crosswalk == 3:  # 多次判断，防止误检测
-                        self.count_crosswalk = 0
-                        self.start_slow_down = True  # 减速标识
-                        self.count_slow_down = rospy.get_time()  # 减速固定时间
-                else:  # 需要连续检测，否则重置
+            # 获取车道线的二值化图
+            binary_image = self.lane_detect.get_binary(image)
+            # 检测到斑马线,开启减速标志
+            if 450 < self.crosswalk_distance and not self.start_slow_down:  # 只有足够近时才开始减速
+                self.count_crosswalk += 1
+                if self.count_crosswalk == 3:  # 多次判断，防止误检测
                     self.count_crosswalk = 0
+                    self.start_slow_down = True  # 减速标识
+                    self.count_slow_down = rospy.get_time()  # 减速固定时间
+            else:  # 需要连续检测，否则重置
+                self.count_crosswalk = 0
 
-                twist = geo_msg.Twist()
-                # 减速行驶处理
-                if self.start_slow_down:
-                    if self.traffic_signs_status == 'red':  # 如果遇到红灯就停车
-                        self.mecanum_pub.publish(geo_msg.Twist())
-                        self.stop = True
-                    elif self.traffic_signs_status == 'green':  # 遇到绿灯，速度放缓
-                        twist.linear.x = self.slow_down_speed
-                        self.stop = False
-                    elif not self.stop:  # 其他非停止的情况速度放缓， 同时计时，时间=斑马线的长度/行驶速度
-                        twist.linear.x = self.slow_down_speed
-                        if rospy.get_time() - self.count_slow_down > self.crosswalk_length/twist.linear.x:
-                            self.start_slow_down = False
-                else:
-                    twist.linear.x = self.normal_speed  # 直走正常速度
-                # 检测到 停车标识+斑马线 就减速, 让识别稳定
-                if 0 < self.park_x and 180 < self.crosswalk_distance:
+            twist = geo_msg.Twist()
+            # 减速行驶处理
+            if self.start_slow_down:
+                if self.traffic_signs_status == 'red':  # 如果遇到红灯就停车
+                    self.mecanum_pub.publish(geo_msg.Twist())
+                    self.stop = True
+                elif self.traffic_signs_status == 'green':  # 遇到绿灯，速度放缓
                     twist.linear.x = self.slow_down_speed
-                    if self.machine_type != 'ROSLander_Acker':
-                        if not self.start_park and 340 < self.crosswalk_distance:  # 离斑马线足够近时就开启停车
-                            self.mecanum_pub.publish(geo_msg.Twist())
-                            self.start_park = True
-                            self.stop = True
-                            threading.Thread(target=self.park_action).start()  
-                    elif self.machine_type == 'ROSLander_Acker':
-                        if not self.start_park and 235 < self.crosswalk_distance:  # 离斑马线足够近时就开启停车
-                            self.mecanum_pub.publish(geo_msg.Twist())
-                            self.start_park = True
-                            self.stop = True
-                            threading.Thread(target=self.park_action).start()                       
-                
-                # 右转及停车补线策略
-                if self.turn_right:
-                    y = self.lane_detect.add_horizontal_line(binary_image)
-                    if 0 < y < 400:
-                        roi = [(0, y), (w, y), (w, 0), (0, 0)]
-                        cv2.fillPoly(binary_image, [np.array(roi)], [0, 0, 0])  # 将上面填充为黑色，防干扰
-                        min_x = cv2.minMaxLoc(binary_image)[-1][0]
-                        cv2.line(binary_image, (min_x, y), (w, y), (255, 255, 255), 40)  # 画虚拟线来驱使转弯
-                elif 0 < self.park_x and not self.start_turn:  # 检测到停车标识需要填补线，使其保持直走
-                    if not self.detect_far_lane:
-                        up, down, center = self.lane_detect.add_vertical_line_near(binary_image)
-                        binary_image[:, :] = 0  # 全置黑，防止干扰
-                        if 50 < center < 80:  # 当将要看不到车道线时切换到识别较远车道线
-                            self.detect_far_lane = True
-                    else:
-                        up, down = self.lane_detect.add_vertical_line_far(binary_image)
-                        binary_image[:, :] = 0
-                    if up != down:
-                        cv2.line(binary_image, up, down, (255, 255, 255), 20)  # 手动画车道线
-
-                result_image, lane_angle, lane_x = self.lane_detect(binary_image, self.image.copy())  # 在处理后的图上提取车道线中心
-                # 巡线处理
-                if lane_x >= 0 and not self.stop:
-                    if lane_x > 150:  # 转弯
-                        if self.turn_right:  # 如果是检测到右转标识的转弯
-                            self.count_right_miss += 1
-                            if self.count_right_miss >= 50:
-                                self.count_right_miss = 0
-                                self.turn_right = False
-                        self.count_turn += 1
-                        if self.count_turn > 5 and not self.start_turn:  # 稳定转弯
-                            self.start_turn = True
-                            self.count_turn = 0
-                            self.start_turn_time_stamp = rospy.get_time()
-                        if self.machine_type != 'ROSLander_Acker':
-                            twist.angular.z = -0.45  # 转弯速度
-                        else:
-                            twist.angular.z = twist.linear.x*math.tan(-0.6)/0.213  # 转弯速度
-                    else:  # 直道由pid计算转弯修正
-                        self.count_turn = 0
-                        if rospy.get_time() - self.start_turn_time_stamp > 3 and self.start_turn:
-                            self.start_turn = False
-                        if not self.start_turn:
-                            self.pid.SetPoint = 100  # 在车道中间时线的坐标
-                            self.pid.update(lane_x)
-                            if self.machine_type != 'ROSLander_Acker':
-                                twist.angular.z = misc.set_range(self.pid.output, -0.8, 0.8)
-                            else:
-                                twist.angular.z = twist.linear.x*math.tan(misc.set_range(self.pid.output, -0.1, 0.1))/0.213
-                        else:
-                            if self.machine_type == 'ROSLander_Acker':
-                                twist.angular.z = 0.15*math.tan(-0.6)/0.213  # 转弯速度
-                    self.mecanum_pub.publish(twist)
-                else:
-                    self.pid.clear()
-                bgr_image = cv2.cvtColor(result_image, cv2.COLOR_RGB2BGR)
-                cv2.imshow('result', bgr_image)
-                key = cv2.waitKey(1)
-                if key != -1:
-                    self.is_running = False
-                #ros_image.data = result_image.tostring()
-                #self.result_publisher.publish(ros_image)
+                    self.stop = False
+                elif not self.stop:  # 其他非停止的情况速度放缓， 同时计时，时间=斑马线的长度/行驶速度
+                    twist.linear.x = self.slow_down_speed
+                    if rospy.get_time() - self.count_slow_down > self.crosswalk_length/twist.linear.x:
+                        self.start_slow_down = False
             else:
-                rospy.sleep(0.01)
+                twist.linear.x = self.normal_speed  # 直走正常速度
+            # 检测到 停车标识+斑马线 就减速, 让识别稳定
+            if 0 < self.park_x and 180 < self.crosswalk_distance:
+                twist.linear.x = self.slow_down_speed
+                if self.machine_type != 'ROSLander_Acker':
+                    if not self.start_park and 340 < self.crosswalk_distance:  # 离斑马线足够近时就开启停车
+                        self.mecanum_pub.publish(geo_msg.Twist())
+                        self.start_park = True
+                        self.stop = True
+                        threading.Thread(target=self.park_action).start()  
+                elif self.machine_type == 'ROSLander_Acker':
+                    if not self.start_park and 235 < self.crosswalk_distance:  # 离斑马线足够近时就开启停车
+                        self.mecanum_pub.publish(geo_msg.Twist())
+                        self.start_park = True
+                        self.stop = True
+                        threading.Thread(target=self.park_action).start()                       
+            
+            # 右转及停车补线策略
+            if self.turn_right:
+                y = self.lane_detect.add_horizontal_line(binary_image)
+                if 0 < y < 400:
+                    roi = [(0, y), (w, y), (w, 0), (0, 0)]
+                    cv2.fillPoly(binary_image, [np.array(roi)], [0, 0, 0])  # 将上面填充为黑色，防干扰
+                    min_x = cv2.minMaxLoc(binary_image)[-1][0]
+                    cv2.line(binary_image, (min_x, y), (w, y), (255, 255, 255), 40)  # 画虚拟线来驱使转弯
+            elif 0 < self.park_x and not self.start_turn:  # 检测到停车标识需要填补线，使其保持直走
+                if not self.detect_far_lane:
+                    up, down, center = self.lane_detect.add_vertical_line_near(binary_image)
+                    binary_image[:, :] = 0  # 全置黑，防止干扰
+                    if 50 < center < 80:  # 当将要看不到车道线时切换到识别较远车道线
+                        self.detect_far_lane = True
+                else:
+                    up, down = self.lane_detect.add_vertical_line_far(binary_image)
+                    binary_image[:, :] = 0
+                if up != down:
+                    cv2.line(binary_image, up, down, (255, 255, 255), 20)  # 手动画车道线
+
+            result_image, lane_angle, lane_x = self.lane_detect(binary_image, image.copy())  # 在处理后的图上提取车道线中心
+            # 巡线处理
+            if lane_x >= 0 and not self.stop:
+                if lane_x > 150:  # 转弯
+                    if self.turn_right:  # 如果是检测到右转标识的转弯
+                        self.count_right_miss += 1
+                        if self.count_right_miss >= 50:
+                            self.count_right_miss = 0
+                            self.turn_right = False
+                    self.count_turn += 1
+                    if self.count_turn > 5 and not self.start_turn:  # 稳定转弯
+                        self.start_turn = True
+                        self.count_turn = 0
+                        self.start_turn_time_stamp = rospy.get_time()
+                    if self.machine_type != 'ROSLander_Acker':
+                        twist.angular.z = -0.45  # 转弯速度
+                    else:
+                        twist.angular.z = twist.linear.x*math.tan(-0.6)/0.213  # 转弯速度
+                else:  # 直道由pid计算转弯修正
+                    self.count_turn = 0
+                    if rospy.get_time() - self.start_turn_time_stamp > 3 and self.start_turn:
+                        self.start_turn = False
+                    if not self.start_turn:
+                        self.pid.SetPoint = 100  # 在车道中间时线的坐标
+                        self.pid.update(lane_x)
+                        if self.machine_type != 'ROSLander_Acker':
+                            twist.angular.z = misc.set_range(self.pid.output, -0.8, 0.8)
+                        else:
+                            twist.angular.z = twist.linear.x*math.tan(misc.set_range(self.pid.output, -0.1, 0.1))/0.213
+                    else:
+                        if self.machine_type == 'ROSLander_Acker':
+                            twist.angular.z = 0.15*math.tan(-0.6)/0.213  # 转弯速度
+                self.mecanum_pub.publish(twist)
+            else:
+                self.pid.clear()
+            bgr_image = cv2.cvtColor(result_image, cv2.COLOR_RGB2BGR)
+
+            if self.objects_info != []:
+                for i in self.objects_info:
+                    box = i.box
+                    class_name = i.class_name
+                    cls_conf = i.score
+                    cls_id = self.classes.index(class_name)
+                    color = common.colors(cls_id, True)
+                    common.plot_one_box(
+                        box,
+                        bgr_image,
+                        color=color,
+                        label="{}:{:.2f}".format(class_name, cls_conf),
+                    )
+            cv2.imshow('result', bgr_image)
+            key = cv2.waitKey(1)
+            if key != -1:
+                self.is_running = False
+
+            # self.result_publisher.publish(common.cv2_image2ros(bgr_image))
+            time_d = 0.03 - (time.time() - time_start)
+            if time_d > 0:
+                time.sleep(time_d)
+        else:
+            rospy.sleep(0.01)
         self.mecanum_pub.publish(geo_msg.Twist())
 
     # 获取目标检测结果
     def get_object_callback(self, msg):
-        objects_info = msg.objects
-        if objects_info == []:  # 没有识别到时重置变量
+        self.objects_info = msg.objects
+        if self.objects_info == []:  # 没有识别到时重置变量
             self.traffic_signs_status = None
             self.crosswalk_distance = 0
         else:
             min_distance = 0
-            for i in objects_info:
+            for i in self.objects_info:
                 class_name = i.class_name
                 center = (int((i.box[0] + i.box[2])/2), int((i.box[1] + i.box[3])/2))
                 

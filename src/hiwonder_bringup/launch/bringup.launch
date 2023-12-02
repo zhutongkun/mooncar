@@ -15,7 +15,7 @@
     <include file="$(find hiwonder_peripherals)/launch/depth_cam.launch"/>
 
     <!--app画面传输(app image transimission)-->
-    <node if="$(eval depth_camera_type != '')" name="web_video_server" pkg="web_video_server" respawn="true" respawn_delay="2"  type="web_video_server" output="screen"/>
+    <node name="web_video_server" pkg="web_video_server" respawn="true" respawn_delay="2"  type="web_video_server" output="screen"/>
 
     <!--app通信(app communication)-->
     <include file="$(find hiwonder_bringup)/launch/rosbridge.launch"/>

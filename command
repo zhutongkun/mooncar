@@ -82,11 +82,14 @@ rosservice call /automatic_pick/pick "{}"
 #开启放置
 rosservice call /automatic_pick/place "{}"
 
+#手控制
+roslaunch hiwonder_example hand_gesture_control.launch
+
 #导航搬运 
 roslaunch hiwonder_example navigation_transport.launch map:=xxx
 
 #无人驾驶
-#roslaunch hiwonder_example self_driving.launch
+roslaunch hiwonder_example self_driving.launch
 
 #人脸检测 
 roscd hiwonder_example/scripts/mediapipe_example && python3 face_detect.py
@@ -123,8 +126,8 @@ roslaunch hiwonder_peripherals teleop_key_control.launch
 roscd hiwonder_slam/maps && rosrun map_server map_saver map:=/robot_1/map -f 保存名称
 
 #app建图
-#roslaunch hiwonder_slam slam.launch app:=true
-#roscd hiwonder_slam/maps && rosrun map_server map_saver map:=/map -f 保存名称
+roslaunch hiwonder_slam slam.launch app:=true
+roscd hiwonder_slam/maps && rosrun map_server map_saver map:=/map -f 保存名称
 
 # hiwonder navigation
 #导航
@@ -137,7 +140,7 @@ roslaunch hiwonder_navigation rviz_navigation.launch
 roslaunch hiwonder_navigation publish_point.launch
 
 #app导航
-#roslaunch hiwonder_navigation navigation.launch map:=地图名称 app:=true
+roslaunch hiwonder_navigation navigation.launch map:=地图名称 app:=true
 
 #3D建图
 roslaunch hiwonder_slam slam.launch slam_methods:=rtabmap
@@ -168,14 +171,14 @@ roslaunch hiwonder_moveit_config demo_gazebo.launch
 
 #仿真建图 
 #gazebo仿真
-#roslaunch hiwonder_gazebo room_worlds.launch
-#roslaunch hiwonder_slam slam.launch sim:=true
-#roslaunch hiwonder_slam rviz_slam.launch sim:=true
+roslaunch hiwonder_gazebo room_worlds.launch
+roslaunch hiwonder_slam slam.launch sim:=true
+roslaunch hiwonder_slam rviz_slam.launch sim:=true
 
 #仿真导航 
-#roslaunch hiwonder_gazebo room_worlds.launch
-#roslaunch hiwonder_navigation navigation.launch sim:=true map:=地图名称
-#roslaunch hiwonder_navigation rviz_navigation.launch sim:=true
+roslaunch hiwonder_gazebo room_worlds.launch
+roslaunch hiwonder_navigation navigation.launch sim:=true map:=地图名称
+roslaunch hiwonder_navigation rviz_navigation.launch sim:=true
 
 #xf_mic_asr_offline
 #语音控制移动 

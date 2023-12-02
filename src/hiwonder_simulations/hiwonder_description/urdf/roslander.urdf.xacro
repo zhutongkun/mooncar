@@ -1175,6 +1175,14 @@
     <axis
       xyz="0 0 0" />
   </joint>
+  <link name="lidar_sim_frame" />
+  <joint
+    name="lidar_sim_frame_joint"
+    type="fixed">
+    <origin xyz="0 0 0" rpy="0 0 ${M_PI}" />
+    <parent link="lidar_link" />
+    <child link="lidar_sim_frame" />
+  </joint>
   <xacro:if value="${lidar in ['A1', 'A2', 'S2L']}">
     <xacro:include filename="$(find hiwonder_description)/urdf/lidar_a1.urdf.xacro"/>
   </xacro:if>
