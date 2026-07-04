@@ -56,3 +56,11 @@ qtcreator-*
 
 # Catkin custom files
 CATKIN_IGNORE
+.ssh/
+*.bag
+*.db3
+*.mcap
+.ros/
+.vscode/
+.gitignore.codex-backup-*
+.goutputstream-*
