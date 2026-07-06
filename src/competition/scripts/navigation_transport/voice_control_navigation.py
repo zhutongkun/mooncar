@@ -53,6 +53,10 @@ class VoiceControlNavNode:
         self.scene_card_settle_time = float(rospy.get_param('~scene_card_settle_time', 0.8))
         self.scene_card_stop_after_task = rospy.get_param('~scene_card_stop_after_task', True)
         self.scene_card_process = None
+        self.auto_start_on_voice_timeout = rospy.get_param('~auto_start_on_voice_timeout', True)
+        self.voice_init_timeout = float(rospy.get_param('~voice_init_timeout', 20.0))
+        self.voice_command_timeout = float(rospy.get_param('~voice_command_timeout', 15.0))
+        self.auto_start_used = False
 
         rospy.Service('~pick', Trigger, self.start_pick_callback)  # 夹取测试
         rospy.Service('~place', Trigger, self.start_place_callback)  # 放置测试
@@ -90,12 +94,17 @@ class VoiceControlNavNode:
         # 订阅路径规划返回话题
         rospy.Subscriber('/move_base/result', MoveBaseActionResult, self.move_callback)
         # 等待语音识别节点启动
+        voice_wait_start = rospy.Time.now()
         while not rospy.is_shutdown():
             try:
                 if rospy.get_param('/voice_control/init_finish'):
                     break
             except:
-                rospy.sleep(0.1)
+                pass
+            if self.auto_start_on_voice_timeout and (rospy.Time.now() - voice_wait_start).to_sec() >= self.voice_init_timeout:
+                rospy.logwarn("Voice control init timeout, continue and auto-start later.")
+                break
+            rospy.sleep(0.1)
 
         self.vc_sub = rospy.Subscriber('/asr_node/voice_words', String, self.words_callback)
         rospy.loginfo('唤醒口令: 小迈小迈')
@@ -150,7 +159,7 @@ class VoiceControlNavNode:
             else:
                 self.right_rear_dist = 2.0
         except Exception as e:
-            rospy.logwarn_throttle(5, "scan_callback error: %s", e)
+            rospy.logwan_throttle(5, "scan_callback error: %s", e)
 
     # ===== 新增：里程计回调，记录当前位置 =====
     def odom_callback(self, msg):
@@ -171,7 +180,7 @@ class VoiceControlNavNode:
             self.goal_pub.publish(PoseStamped())  # 发布空目标
             rospy.loginfo("Cancelled move_base goal")
         except Exception as e:
-            rospy.logwarn("Failed to cancel move_base goal: %s", e)
+            rospy.logwan("Failed to cancel move_base goal: %s", e)
 
         # 记录起始里程计位置
         start_pose = self.current_pose
@@ -310,14 +319,14 @@ class VoiceControlNavNode:
         try:
             voice_play.play(name, language=self.language)
         except Exception as e:
-            rospy.logwarn('语音播放失败: %s, %s', name, e)
+            rospy.logwan('语音播放失败: %s, %s', name, e)
 
     def call_trigger(self, service_name, timeout=1.5):
         try:
             rospy.wait_for_service(service_name, timeout=timeout)
             return rospy.ServiceProxy(service_name, Trigger)()
         except Exception as e:
-            rospy.logwarn('服务调用跳过: %s, %s', service_name, e)
+            rospy.logwan('服务调用跳过: %s, %s', service_name, e)
             return None
 
     def ensure_scene_card_node(self):
@@ -432,7 +441,7 @@ class VoiceControlNavNode:
                 rospy.loginfo("Pick status changed to stop, reset to start.")
                 return True
             if (rospy.Time.now() - start_time).to_sec() > timeout:
-                rospy.logwarn("wait_pick_status timeout after %.1f seconds, forcing continue.", timeout)
+                rospy.logwan("wait_pick_status timeout after %.1f seconds, forcing continue.", timeout)
                 rospy.set_param('/shape_recognition/status', "start")
                 return False
             rate.sleep()
@@ -490,7 +499,7 @@ class VoiceControlNavNode:
         ]
         if shape in known:
             return shape
-        rospy.logwarn('未知月球环境类别: %s', raw_shape)
+        rospy.logwan('未知月球环境类别: %s', raw_shape)
         return shape
 
     def detect_scene_card(self, task_index):
@@ -507,7 +516,7 @@ class VoiceControlNavNode:
                 if (rospy.Time.now() - start).to_sec() > self.scene_card_timeout:
                     break
                 rospy.sleep(0.2)
-            rospy.logwarn('第%d个任务点第%d次月球环境识别超时', task_index, attempt + 1)
+            rospy.logwan('第%d个任务点第%d次月球环境识别超时', task_index, attempt + 1)
         return 'unknown'
 
     def run_scene_card_task(self, report=False):
@@ -537,7 +546,7 @@ class VoiceControlNavNode:
 
     def report_scene_card_results(self):
         if not self.scene_card_results:
-            rospy.logwarn('没有月球环境识别结果，跳过播报')
+            rospy.logwan('没有月球环境识别结果，跳过播报')
             return
         for index, result in enumerate(self.scene_card_results, 1):
             name = result if result else 'unknown'
@@ -601,7 +610,7 @@ class VoiceControlNavNode:
                                   current_yaw, target_yaw, diff)
                     nav_yaw = target_yaw
             except Exception as e:
-                rospy.logwarn("Failed to get current yaw, using target yaw as fallback: %s", e)
+                rospy.logwan("Failed to get current yaw, using target yaw as fallback: %s", e)
                 nav_yaw = target_yaw
 
             # 发布导航点
@@ -699,7 +708,7 @@ class VoiceControlNavNode:
             rospy.ServiceProxy('/yolov5/stop', Trigger)()
             rospy.loginfo("Depth camera stopped.")
         except Exception as e:
-            rospy.logwarn("Failed to stop depth camera: %s (continuing anyway)", e)
+            rospy.logwan("Failed to stop depth camera: %s (continuing anyway)", e)
 
         try:
             rospy.wait_for_service('/shape_recognition/start', timeout=5.0)
@@ -712,7 +721,7 @@ class VoiceControlNavNode:
 
         current_status = rospy.get_param('/shape_recognition/status', 'start')
         if current_status != 'start':
-            rospy.logwarn("Resetting /shape_recognition/status to 'start' before pick.")
+            rospy.logwan("Resetting /shape_recognition/status to 'start' before pick.")
             rospy.set_param('/shape_recognition/status', 'start')
             rospy.sleep(0.5)
 
@@ -765,6 +774,7 @@ class VoiceControlNavNode:
             rospy.logerr("Failed to restart depth camera: %s", e)
 
     def run(self):
+        voice_command_wait_start = rospy.Time.now()
         while not rospy.is_shutdown() and self.running:
             if self.words is not None:
                 if self.slope_surface is not True:
@@ -805,11 +815,11 @@ class VoiceControlNavNode:
                     try:
                         rospy.ServiceProxy('/position_correction/close', Trigger)()
                     except:
-                        rospy.logwarn("Failed to call /position_correction/close")
+                        rospy.logwan("Failed to call /position_correction/close")
                     try:
                         rospy.ServiceProxy('/shape_recognition/close', Trigger)()
                     except:
-                        rospy.logwarn("Failed to call /shape_recognition/close")
+                        rospy.logwan("Failed to call /shape_recognition/close")
 
                     self.run_scene_card_task(report=False)
 
@@ -852,6 +862,15 @@ class VoiceControlNavNode:
                     rospy.sleep(0.01)
                 self.words = None
             else:
+                if (self.auto_start_on_voice_timeout and not self.auto_start_used and
+                        (rospy.Time.now() - voice_command_wait_start).to_sec() >= self.voice_command_timeout):
+                    if self.slope_surface is not True:
+                        self.words = "开始安全任务"
+                    else:
+                        self.words = "开始执行任务"
+                    self.auto_start_used = True
+                    rospy.logwarn("Voice command timeout, auto-starting task.")
+                    continue
                 rospy.sleep(0.01)
 
         self.mecanum_pub.publish(Twist())
