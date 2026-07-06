@@ -12,6 +12,8 @@
     <arg name="robot_name"   default="/"/>
     <arg name="frame_prefix"  default="/"/>
     <arg name="drive_type"  default="diff-corrected"/>
+    <arg name="scene_card_camera_name" default="astra_camera"/>
+    <arg name="scene_card_conf_thresh" default="0.6"/>
 
     <arg name="map_frame"    default="map"/>
 
@@ -46,6 +48,17 @@
         <param name="engine"        value="shape_models.engine"/>
         <param name="lib"           value="shape_models_libmyplugins.so"/>
         <param name="conf_thresh"   value="0.6"/>
+    </node>
+
+    <!--月球环境识别 YOLO5-->
+    <node pkg="competition" type="yolov5_scene_card_node.py" name="yolov5_scene_card" output="screen" respawn="true">
+        <param name="engine"               value="model/scene_card.engine"/>
+        <param name="lib"                  value="model/scene_card_libmyplugins.so"/>
+        <param name="conf_thresh"          value="$(arg scene_card_conf_thresh)"/>
+        <param name="classes_file"         value="$(find competition)/scripts/navigation_transport/scene_card/model/classes.names"/>
+        <param name="camera_name"          value="$(arg scene_card_camera_name)"/>
+        <param name="auto_start"           value="false"/>
+        <param name="publish_object_image" value="true"/>
     </node>
 
     <!--运动学节点(chassis driver)-->
