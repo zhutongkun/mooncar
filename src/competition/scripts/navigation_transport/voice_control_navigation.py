@@ -6,6 +6,7 @@ import json
 import rospy
 import signal
 import math
+import subprocess
 from nav_msgs.msg import OccupancyGrid, Odometry
 from std_msgs.msg import String, Int32
 from sensor_msgs.msg import Image, LaserScan
@@ -51,6 +52,7 @@ class VoiceControlNavNode:
         self.scene_card_retry = int(rospy.get_param('~scene_card_retry', 2))
         self.scene_card_settle_time = float(rospy.get_param('~scene_card_settle_time', 0.8))
         self.scene_card_stop_after_task = rospy.get_param('~scene_card_stop_after_task', True)
+        self.scene_card_process = None
 
         rospy.Service('~pick', Trigger, self.start_pick_callback)  # 夹取测试
         rospy.Service('~place', Trigger, self.start_place_callback)  # 放置测试
@@ -318,6 +320,38 @@ class VoiceControlNavNode:
             rospy.logwarn('服务调用跳过: %s, %s', service_name, e)
             return None
 
+    def ensure_scene_card_node(self):
+        try:
+            rospy.wait_for_service('/yolov5_scene_card/start', timeout=0.5)
+            return True
+        except Exception:
+            pass
+
+        rospy.loginfo('按国赛任务需要启动月球环境识别节点 yolov5_scene_card')
+        if self.scene_card_process is None or self.scene_card_process.poll() is not None:
+            self.scene_card_process = subprocess.Popen(
+                ['rosrun', 'competition', 'yolov5_scene_card_node.py']
+            )
+
+        try:
+            rospy.wait_for_service('/yolov5_scene_card/start', timeout=70.0)
+            return True
+        except Exception as e:
+            rospy.logerr('月球环境识别节点启动失败: %s', e)
+            return False
+
+    def stop_scene_card_node(self):
+        self.call_trigger('/yolov5_scene_card/stop', timeout=1.0)
+        if self.scene_card_process is not None and self.scene_card_process.poll() is None:
+            try:
+                self.scene_card_process.terminate()
+                self.scene_card_process.wait(timeout=3.0)
+            except Exception:
+                try:
+                    self.scene_card_process.kill()
+                except Exception:
+                    pass
+
     def shutdown(self, signum, frame):
         self.running = False
         rospy.loginfo('shutdown')
@@ -481,6 +515,9 @@ class VoiceControlNavNode:
         points = self.get_scene_card_points()
 
         self.call_trigger('/yolov5/stop', timeout=1.0)
+        if not self.ensure_scene_card_node():
+            self.scene_card_results = ['unknown', 'unknown', 'unknown']
+            return False
         self.call_trigger('/yolov5_scene_card/start', timeout=3.0)
         try:
             for index, point in enumerate(points, 1):
@@ -492,7 +529,7 @@ class VoiceControlNavNode:
                 self.scene_card_results.append(result)
         finally:
             if self.scene_card_stop_after_task:
-                self.call_trigger('/yolov5_scene_card/stop', timeout=1.0)
+                self.stop_scene_card_node()
 
         if report:
             self.report_scene_card_results()
